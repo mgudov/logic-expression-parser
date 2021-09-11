@@ -15,26 +15,26 @@ func parseExpressions(items ...interface{}) (expr []Expression) {
 	return expr
 }
 
-type And struct {
+type AndX struct {
 	conjuncts []Expression
 }
 
-var _ Expression = (*And)(nil)
+var _ Expression = (*AndX)(nil)
 
-func NewAnd(expr ...Expression) *And {
+func And(expr ...Expression) *AndX {
 	var conjuncts []Expression
 	for _, e := range expr {
-		if exprAndX, ok := e.(*And); ok {
+		if exprAndX, ok := e.(*AndX); ok {
 			conjuncts = append(conjuncts, exprAndX.conjuncts...)
 		} else {
 			conjuncts = append(conjuncts, e)
 		}
 	}
-	return &And{conjuncts: conjuncts}
+	return &AndX{conjuncts: conjuncts}
 }
 
-func (e And) Equals(other Expression) bool {
-	otherAndX, ok := other.(*And)
+func (e AndX) Equals(other Expression) bool {
+	otherAndX, ok := other.(*AndX)
 	if !ok {
 		return false
 	}
@@ -60,10 +60,10 @@ func (e And) Equals(other Expression) bool {
 	return len(rightConjuncts) == 0
 }
 
-func (e And) String() string {
+func (e AndX) String() string {
 	var items []string
 	for _, conjunct := range e.conjuncts {
-		if _, ok := conjunct.(*Or); ok {
+		if _, ok := conjunct.(*OrX); ok {
 			items = append(items, "("+conjunct.String()+")")
 		} else {
 			items = append(items, conjunct.String())
@@ -72,31 +72,31 @@ func (e And) String() string {
 	return strings.Join(items, " && ")
 }
 
-func parseAnd(elements ...interface{}) (*And, error) {
+func parseAnd(elements ...interface{}) (*AndX, error) {
 	expr := parseExpressions(elements...)
-	return NewAnd(expr...), nil
+	return And(expr...), nil
 }
 
-type Or struct {
+type OrX struct {
 	disjunctions []Expression
 }
 
-var _ Expression = (*Or)(nil)
+var _ Expression = (*OrX)(nil)
 
-func NewOr(expr ...Expression) *Or {
+func Or(expr ...Expression) *OrX {
 	var disjunctions []Expression
 	for _, e := range expr {
-		if exprOrX, ok := e.(*Or); ok {
+		if exprOrX, ok := e.(*OrX); ok {
 			disjunctions = append(disjunctions, exprOrX.disjunctions...)
 		} else {
 			disjunctions = append(disjunctions, e)
 		}
 	}
-	return &Or{disjunctions: disjunctions}
+	return &OrX{disjunctions: disjunctions}
 }
 
-func (e Or) Equals(other Expression) bool {
-	otherOrX, ok := other.(*Or)
+func (e OrX) Equals(other Expression) bool {
+	otherOrX, ok := other.(*OrX)
 	if !ok {
 		return false
 	}
@@ -122,7 +122,7 @@ func (e Or) Equals(other Expression) bool {
 	return len(rightDisjunctions) == 0
 }
 
-func (e Or) String() string {
+func (e OrX) String() string {
 	var items []string
 	for _, disjunction := range e.disjunctions {
 		items = append(items, disjunction.String())
@@ -130,7 +130,7 @@ func (e Or) String() string {
 	return strings.Join(items, " || ")
 }
 
-func parseOr(elements ...interface{}) (*Or, error) {
+func parseOr(elements ...interface{}) (*OrX, error) {
 	expr := parseExpressions(elements...)
-	return NewOr(expr...), nil
+	return Or(expr...), nil
 }

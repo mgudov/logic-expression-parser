@@ -35,7 +35,7 @@ func TestParseString(t *testing.T) {
 	for _, tt := range tests {
 		v, err := parseString(tt.raw)
 		if assert.NoError(t, err) {
-			assert.IsType(t, (*String)(nil), v)
+			assert.IsType(t, (*StringX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
 			assert.Equal(t, `"`+tt.result+`"`, v.String())
@@ -80,7 +80,7 @@ func TestParseInteger(t *testing.T) {
 	for _, tt := range tests {
 		v, err := parseInteger(tt.raw)
 		if tt.err == nil && assert.NoError(t, err) && v != nil {
-			assert.IsType(t, (*Integer)(nil), v)
+			assert.IsType(t, (*IntegerX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
 			assert.Equal(t, fmt.Sprintf("%d", tt.result), v.String())
@@ -127,7 +127,7 @@ func TestParseFloat(t *testing.T) {
 	for _, tt := range tests {
 		v, err := parseFloat(tt.raw)
 		if tt.err == nil && assert.NoError(t, err) && v != nil {
-			assert.IsType(t, (*Float)(nil), v)
+			assert.IsType(t, (*FloatX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
 			assert.Equal(t, strings.TrimRight(fmt.Sprintf("%f", tt.result), "0"), v.String())
@@ -162,14 +162,14 @@ func TestParseBoolean(t *testing.T) {
 		},
 		{
 			raw: []byte("not_boolean"),
-			err: NewIncorrectValue("parseBoolean", "(true/false)", "not_boolean"),
+			err: IncorrectValue("parseBoolean", "(true/false)", "not_boolean"),
 		},
 	}
 
 	for _, tt := range tests {
 		v, err := parseBoolean(tt.raw)
 		if tt.err == nil && assert.NoError(t, err) && v != nil {
-			assert.IsType(t, (*Boolean)(nil), v)
+			assert.IsType(t, (*BooleanX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
 			assert.Equal(t, strconv.FormatBool(tt.result), v.String())
@@ -182,7 +182,7 @@ func TestParseBoolean(t *testing.T) {
 func TestParseNull(t *testing.T) {
 	v, err := parseNull()
 	if assert.NoError(t, err) {
-		assert.IsType(t, (*Null)(nil), v)
+		assert.IsType(t, (*NullX)(nil), v)
 		assert.Equal(t, nil, v.Value())
 		assert.Equal(t, "null", v.String())
 	}
@@ -196,18 +196,18 @@ func TestString_Equals(t *testing.T) {
 	}
 	var tests = []testStringEquals{
 		{
-			v1:     NewString("foo"),
-			v2:     NewString("foo"),
+			v1:     String("foo"),
+			v2:     String("foo"),
 			result: true,
 		},
 		{
-			v1:     NewString("foo"),
-			v2:     NewString("bar"),
+			v1:     String("foo"),
+			v2:     String("bar"),
 			result: false,
 		},
 		{
-			v1:     NewString("foo"),
-			v2:     NewInteger(1),
+			v1:     String("foo"),
+			v2:     Integer(1),
 			result: false,
 		},
 	}
@@ -226,33 +226,33 @@ func TestInteger_Equals(t *testing.T) {
 	}
 	var tests = []testIntegerEquals{
 		{
-			v1:     NewInteger(100),
-			v2:     NewInteger(100),
+			v1:     Integer(100),
+			v2:     Integer(100),
 			result: true,
 		},
 		{
-			v1:     NewInteger(-100),
-			v2:     NewInteger(-100),
+			v1:     Integer(-100),
+			v2:     Integer(-100),
 			result: true,
 		},
 		{
-			v1:     NewInteger(100),
-			v2:     NewInteger(200),
+			v1:     Integer(100),
+			v2:     Integer(200),
 			result: false,
 		},
 		{
-			v1:     NewInteger(-100),
-			v2:     NewInteger(-200),
+			v1:     Integer(-100),
+			v2:     Integer(-200),
 			result: false,
 		},
 		{
-			v1:     NewInteger(100),
-			v2:     NewInteger(-100),
+			v1:     Integer(100),
+			v2:     Integer(-100),
 			result: false,
 		},
 		{
-			v1:     NewInteger(100),
-			v2:     NewString("foo"),
+			v1:     Integer(100),
+			v2:     String("foo"),
 			result: false,
 		},
 	}
@@ -271,33 +271,33 @@ func TestFloat_Equals(t *testing.T) {
 	}
 	var tests = []testFloatEquals{
 		{
-			v1:     NewFloat(12.34),
-			v2:     NewFloat(12.34),
+			v1:     Float(12.34),
+			v2:     Float(12.34),
 			result: true,
 		},
 		{
-			v1:     NewFloat(-12.34),
-			v2:     NewFloat(-12.34),
+			v1:     Float(-12.34),
+			v2:     Float(-12.34),
 			result: true,
 		},
 		{
-			v1:     NewFloat(12.34),
-			v2:     NewFloat(12.35),
+			v1:     Float(12.34),
+			v2:     Float(12.35),
 			result: false,
 		},
 		{
-			v1:     NewFloat(-12.34),
-			v2:     NewFloat(-12.35),
+			v1:     Float(-12.34),
+			v2:     Float(-12.35),
 			result: false,
 		},
 		{
-			v1:     NewFloat(12.34),
-			v2:     NewFloat(-12.34),
+			v1:     Float(12.34),
+			v2:     Float(-12.34),
 			result: false,
 		},
 		{
-			v1:     NewFloat(12.34),
-			v2:     NewString("foo"),
+			v1:     Float(12.34),
+			v2:     String("foo"),
 			result: false,
 		},
 	}
@@ -316,23 +316,23 @@ func TestBoolean_Equals(t *testing.T) {
 	}
 	var tests = []testBooleanEquals{
 		{
-			v1:     NewBoolean(true),
-			v2:     NewBoolean(true),
+			v1:     Boolean(true),
+			v2:     Boolean(true),
 			result: true,
 		},
 		{
-			v1:     NewBoolean(false),
-			v2:     NewBoolean(false),
+			v1:     Boolean(false),
+			v2:     Boolean(false),
 			result: true,
 		},
 		{
-			v1:     NewBoolean(true),
-			v2:     NewBoolean(false),
+			v1:     Boolean(true),
+			v2:     Boolean(false),
 			result: false,
 		},
 		{
-			v1:     NewBoolean(true),
-			v2:     NewInteger(1),
+			v1:     Boolean(true),
+			v2:     Integer(1),
 			result: false,
 		},
 	}
@@ -351,18 +351,18 @@ func TestNull_Equals(t *testing.T) {
 	}
 	var tests = []testNullEquals{
 		{
-			v1:     NewNull(),
-			v2:     NewNull(),
+			v1:     Null(),
+			v2:     Null(),
 			result: true,
 		},
 		{
-			v1:     NewNull(),
-			v2:     NewBoolean(false),
+			v1:     Null(),
+			v2:     Boolean(false),
 			result: false,
 		},
 		{
-			v1:     NewNull(),
-			v2:     NewInteger(0),
+			v1:     Null(),
+			v2:     Integer(0),
 			result: false,
 		},
 	}

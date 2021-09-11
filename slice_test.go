@@ -7,11 +7,11 @@ import (
 
 func TestParseSlice(t *testing.T) {
 	var (
-		v1 = NewString("foo")
-		v2 = NewInteger(100)
-		v3 = NewFloat(12.34)
-		v4 = NewBoolean(true)
-		v5 = NewNull()
+		v1 = String("foo")
+		v2 = Integer(100)
+		v3 = Float(12.34)
+		v4 = Boolean(true)
+		v5 = Null()
 	)
 
 	type testParseSlice struct {
@@ -21,21 +21,21 @@ func TestParseSlice(t *testing.T) {
 	var tests = []testParseSlice{
 		{
 			items:  []interface{}{v1, v2, v3, v4, v5},
-			result: NewSlice(v1, v2, v3, v4, v5),
+			result: Slice(v1, v2, v3, v4, v5),
 		},
 		{
 			items:  []interface{}{v1, "foo", v2, v3, "bar", v4, v5},
-			result: NewSlice(v1, v2, v3, v4, v5),
+			result: Slice(v1, v2, v3, v4, v5),
 		},
 		{
 			items:  []interface{}{v1, v3, []interface{}{v5}},
-			result: NewSlice(v1, v3, v5),
+			result: Slice(v1, v3, v5),
 		},
 	}
 	for _, tt := range tests {
 		s, err := parseSlice(tt.items...)
 		if assert.NoError(t, err) {
-			assert.IsType(t, (*Slice)(nil), s)
+			assert.IsType(t, (*SliceX)(nil), s)
 			assert.Equal(t, tt.result, s)
 			assert.Equal(t, tt.result.Value(), s.Value())
 			assert.Equal(t, tt.result.String(), s.String())
@@ -45,12 +45,12 @@ func TestParseSlice(t *testing.T) {
 
 func TestParseInSlice(t *testing.T) {
 	var (
-		p1 = NewParam("a")
-		v1 = NewString("foo")
-		v2 = NewInteger(100)
-		v3 = NewFloat(12.34)
-		v4 = NewBoolean(true)
-		v5 = NewNull()
+		p1 = Param("a")
+		v1 = String("foo")
+		v2 = Integer(100)
+		v3 = Float(12.34)
+		v4 = Boolean(true)
+		v5 = Null()
 	)
 
 	type testParseInSlice struct {
@@ -62,25 +62,25 @@ func TestParseInSlice(t *testing.T) {
 	var tests = []testParseInSlice{
 		{
 			left:   p1,
-			right:  NewSlice(v1, v2, v3, v4, v5),
+			right:  Slice(v1, v2, v3, v4, v5),
 			result: `a in ["foo",100,12.34,true,null]`,
 		},
 		{
 			left:  p1,
 			right: v1,
-			err:   NewIncorrectType("parseInSlice", (*Slice)(nil), (*String)(nil)),
+			err:   IncorrectType("parseInSlice", (*SliceX)(nil), (*StringX)(nil)),
 		},
 		{
-			left:  NewParam("a"),
-			right: NewEquals(p1, v1),
-			err:   NewIncorrectType("parseStatement", (*Value)(nil), (*Equals)(nil)),
+			left:  Param("a"),
+			right: Equals(p1, v1),
+			err:   IncorrectType("parseStatement", (*Value)(nil), (*EqualsX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		s, err := parseInSlice(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && s != nil {
-			assert.IsType(t, (*InSlice)(nil), s)
+			assert.IsType(t, (*InSliceX)(nil), s)
 			assert.Equal(t, tt.left, s.Param)
 			assert.Equal(t, tt.right, s.Slice)
 			assert.Equal(t, tt.result, s.String())
@@ -92,12 +92,12 @@ func TestParseInSlice(t *testing.T) {
 
 func TestParseNotInSlice(t *testing.T) {
 	var (
-		p1 = NewParam("a")
-		v1 = NewString("foo")
-		v2 = NewInteger(100)
-		v3 = NewFloat(12.34)
-		v4 = NewBoolean(true)
-		v5 = NewNull()
+		p1 = Param("a")
+		v1 = String("foo")
+		v2 = Integer(100)
+		v3 = Float(12.34)
+		v4 = Boolean(true)
+		v5 = Null()
 	)
 
 	type testParseNotInSlice struct {
@@ -109,25 +109,25 @@ func TestParseNotInSlice(t *testing.T) {
 	var tests = []testParseNotInSlice{
 		{
 			left:   p1,
-			right:  NewSlice(v1, v2, v3, v4, v5),
+			right:  Slice(v1, v2, v3, v4, v5),
 			result: `a not_in ["foo",100,12.34,true,null]`,
 		},
 		{
 			left:  p1,
 			right: v1,
-			err:   NewIncorrectType("parseNotInSlice", (*Slice)(nil), (*String)(nil)),
+			err:   IncorrectType("parseNotInSlice", (*SliceX)(nil), (*StringX)(nil)),
 		},
 		{
-			left:  NewParam("a"),
-			right: NewEquals(p1, v1),
-			err:   NewIncorrectType("parseStatement", (*Value)(nil), (*Equals)(nil)),
+			left:  Param("a"),
+			right: Equals(p1, v1),
+			err:   IncorrectType("parseStatement", (*Value)(nil), (*EqualsX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		s, err := parseNotInSlice(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && s != nil {
-			assert.IsType(t, (*NotInSlice)(nil), s)
+			assert.IsType(t, (*NotInSliceX)(nil), s)
 			assert.Equal(t, tt.left, s.Param)
 			assert.Equal(t, tt.right, s.Slice)
 			assert.Equal(t, tt.result, s.String())
@@ -139,11 +139,11 @@ func TestParseNotInSlice(t *testing.T) {
 
 func TestSlice_Equals(t *testing.T) {
 	var (
-		v1 = NewString("foo")
-		v2 = NewInteger(100)
-		v3 = NewFloat(12.34)
-		v4 = NewBoolean(true)
-		v5 = NewNull()
+		v1 = String("foo")
+		v2 = Integer(100)
+		v3 = Float(12.34)
+		v4 = Boolean(true)
+		v5 = Null()
 	)
 
 	type testSliceEquals struct {
@@ -153,22 +153,22 @@ func TestSlice_Equals(t *testing.T) {
 	}
 	var tests = []testSliceEquals{
 		{
-			s1:     NewSlice(v1, v2, v3, v4, v5),
-			s2:     NewSlice(v1, v2, v3, v4, v5),
+			s1:     Slice(v1, v2, v3, v4, v5),
+			s2:     Slice(v1, v2, v3, v4, v5),
 			result: true,
 		},
 		{
-			s1:     NewSlice(v1, v2, v3, v4, v5),
-			s2:     NewSlice(v5, v4, v3, v2, v1),
+			s1:     Slice(v1, v2, v3, v4, v5),
+			s2:     Slice(v5, v4, v3, v2, v1),
 			result: false,
 		},
 		{
-			s1:     NewSlice(v1, v2, v3, v4, v5),
-			s2:     NewSlice(v1, v2, v3),
+			s1:     Slice(v1, v2, v3, v4, v5),
+			s2:     Slice(v1, v2, v3),
 			result: false,
 		},
 		{
-			s1:     NewSlice(v1, v2, v3, v4, v5),
+			s1:     Slice(v1, v2, v3, v4, v5),
 			s2:     v1,
 			result: false,
 		},
@@ -182,12 +182,12 @@ func TestSlice_Equals(t *testing.T) {
 
 func TestInSlice_Equals(t *testing.T) {
 	var (
-		p1 = NewParam("a")
-		v1 = NewString("foo")
-		v2 = NewInteger(100)
-		v3 = NewFloat(12.34)
-		v4 = NewBoolean(true)
-		v5 = NewNull()
+		p1 = Param("a")
+		v1 = String("foo")
+		v2 = Integer(100)
+		v3 = Float(12.34)
+		v4 = Boolean(true)
+		v5 = Null()
 	)
 
 	type testInSliceEquals struct {
@@ -197,23 +197,23 @@ func TestInSlice_Equals(t *testing.T) {
 	}
 	var tests = []testInSliceEquals{
 		{
-			s1:     NewInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
+			s1:     InSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     InSlice(p1, Slice(v1, v2, v3, v4, v5)),
 			result: true,
 		},
 		{
-			s1:     NewInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewInSlice(p1, NewSlice(v5, v4, v3, v2, v1)),
+			s1:     InSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     InSlice(p1, Slice(v5, v4, v3, v2, v1)),
 			result: false,
 		},
 		{
-			s1:     NewInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewInSlice(p1, NewSlice(v1, v2, v3)),
+			s1:     InSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     InSlice(p1, Slice(v1, v2, v3)),
 			result: false,
 		},
 		{
-			s1:     NewInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewSlice(v1, v2, v3, v4, v5),
+			s1:     InSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     Slice(v1, v2, v3, v4, v5),
 			result: false,
 		},
 	}
@@ -226,12 +226,12 @@ func TestInSlice_Equals(t *testing.T) {
 
 func TestNotInSlice_Equals(t *testing.T) {
 	var (
-		p1 = NewParam("a")
-		v1 = NewString("foo")
-		v2 = NewInteger(100)
-		v3 = NewFloat(12.34)
-		v4 = NewBoolean(true)
-		v5 = NewNull()
+		p1 = Param("a")
+		v1 = String("foo")
+		v2 = Integer(100)
+		v3 = Float(12.34)
+		v4 = Boolean(true)
+		v5 = Null()
 	)
 
 	type testNotInSliceEquals struct {
@@ -241,23 +241,23 @@ func TestNotInSlice_Equals(t *testing.T) {
 	}
 	var tests = []testNotInSliceEquals{
 		{
-			s1:     NewNotInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewNotInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
+			s1:     NotInSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     NotInSlice(p1, Slice(v1, v2, v3, v4, v5)),
 			result: true,
 		},
 		{
-			s1:     NewNotInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewNotInSlice(p1, NewSlice(v5, v4, v3, v2, v1)),
+			s1:     NotInSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     NotInSlice(p1, Slice(v5, v4, v3, v2, v1)),
 			result: false,
 		},
 		{
-			s1:     NewNotInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewNotInSlice(p1, NewSlice(v1, v2, v3)),
+			s1:     NotInSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     NotInSlice(p1, Slice(v1, v2, v3)),
 			result: false,
 		},
 		{
-			s1:     NewNotInSlice(p1, NewSlice(v1, v2, v3, v4, v5)),
-			s2:     NewSlice(v1, v2, v3, v4, v5),
+			s1:     NotInSlice(p1, Slice(v1, v2, v3, v4, v5)),
+			s2:     Slice(v1, v2, v3, v4, v5),
 			result: false,
 		},
 	}

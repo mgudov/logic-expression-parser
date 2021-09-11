@@ -47,55 +47,55 @@ func main() {
 This library would parse the expression and return the following struct:
 
 ```
-(*lep.And)({
- conjuncts: ([]lep.Expression) (len=3 cap=4) {
-  (*lep.Equals)({
-   Param: (*lep.Param)({
-    Name: (string) (len=1) "a"
-   }),
-   Value: (*lep.Boolean)({
-    Val: (bool) false
-   })
-  }),
-  (*lep.GreaterThanEqual)({
-   Param: (*lep.Param)({
-    Name: (string) (len=1) "b"
-   }),
-   Value: (*lep.Param)({
-    Name: (string) (len=1) "c"
-   })
-  }),
-  (*lep.Or)({
-   disjunctions: ([]lep.Expression) (len=2 cap=2) {
-    (*lep.LessThan)({
-     Param: (*lep.Param)({
-      Name: (string) (len=1) "d"
-     }),
-     Value: (*lep.Integer)({
-      Val: (int64) 1000
-     })
+(*lep.AndX)({
+  conjuncts: ([]lep.Expression) (len=3 cap=4) {
+    (*lep.EqualsX)({
+      Param: (*lep.ParamX)({
+        Name: (string) (len=1) "a"
+      }),
+      Value: (*lep.BooleanX)({
+        Val: (bool) false
+      })
     }),
-    (*lep.InSlice)({
-     Param: (*lep.Param)({
-      Name: (string) (len=1) "e"
-     }),
-     Slice: (*lep.Slice)({
-      Values: ([]lep.Value) (len=3 cap=4) {
-       (*lep.Integer)({
-        Val: (int64) 1
-       }),
-       (*lep.Integer)({
-        Val: (int64) 2
-       }),
-       (*lep.Integer)({
-        Val: (int64) 3
-       })
+    (*lep.GreaterThanEqualX)({
+      Param: (*lep.ParamX)({
+        Name: (string) (len=1) "b"
+      }),
+      Value: (*lep.ParamX)({
+        Name: (string) (len=1) "c"
+      })
+    }),
+    (*lep.OrX)({
+      disjunctions: ([]lep.Expression) (len=2 cap=2) {
+        (*lep.LessThanX)({
+          Param: (*lep.ParamX)({
+            Name: (string) (len=1) "d"
+          }),
+          Value: (*lep.IntegerX)({
+            Val: (int64) 1000
+          })
+        }),
+        (*lep.InSliceX)({
+          Param: (*lep.ParamX)({
+            Name: (string) (len=1) "e"
+          }),
+          Slice: (*lep.SliceX)({
+            Values: ([]lep.Value) (len=3 cap=4) {
+              (*lep.IntegerX)({
+                Val: (int64) 1
+              }),
+              (*lep.IntegerX)({
+                Val: (int64) 2
+              }),
+              (*lep.IntegerX)({
+                Val: (int64) 3
+              })
+            }
+          })
+        })
       }
-     })
     })
-   }
-  })
- }
+  }
 })
 ```
 
@@ -110,14 +110,14 @@ import (
 )
 
 func main() {
-	expression := lep.NewAnd(
-		lep.NewEquals(lep.NewParam("a"), lep.NewBoolean(false)),
-		lep.NewGreaterThanEqual(lep.NewParam("b"), lep.NewParam("c")),
-		lep.NewOr(
-			lep.NewLessThan(lep.NewParam("d"), lep.NewInteger(1000)),
-			lep.NewInSlice(
-				lep.NewParam("e"),
-				lep.NewSlice(lep.NewInteger(1), lep.NewInteger(2), lep.NewInteger(3)),
+	expression := lep.And(
+		lep.Equals(lep.Param("a"), lep.Boolean(false)),
+		lep.GreaterThanEqual(lep.Param("b"), lep.Param("c")),
+		lep.Or(
+			lep.LessThan(lep.Param("d"), lep.Integer(1000)),
+			lep.InSlice(
+				lep.Param("e"),
+				lep.Slice(lep.Integer(1), lep.Integer(2), lep.Integer(3)),
 			),
 		),
 	)
@@ -152,5 +152,5 @@ ok  	github.com/mgudov/logic-expression-parser	8.928s
 
 ## Used Libraries
 
-For parsing the string query binding the [pigeon](https://github.com/mna/pigeon) parser generator is used
+For parsing the string the [pigeon](https://github.com/mna/pigeon) parser generator is used
 (Licensed under [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)).

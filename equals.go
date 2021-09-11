@@ -1,61 +1,61 @@
 package lep
 
-type Equals statement
+type EqualsX statement
 
-var _ Expression = (*Equals)(nil)
+var _ Expression = (*EqualsX)(nil)
 
-func NewEquals(param *Param, value Value) *Equals {
-	return &Equals{
+func Equals(param *ParamX, value Value) *EqualsX {
+	return &EqualsX{
 		Param: param,
 		Value: value,
 	}
 }
 
-func (e Equals) Equals(other Expression) bool {
-	if expr, ok := other.(*Equals); ok {
+func (e EqualsX) Equals(other Expression) bool {
+	if expr, ok := other.(*EqualsX); ok {
 		return e.Param.Equals(expr.Param) && e.Value.Equals(expr.Value)
 	}
 	return false
 }
 
-func (e Equals) String() string {
+func (e EqualsX) String() string {
 	return e.Param.String() + "=" + e.Value.String()
 }
 
-func parseEquals(left, right interface{}) (*Equals, error) {
+func parseEquals(left, right interface{}) (*EqualsX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	return NewEquals(param, value), nil
+	return Equals(param, value), nil
 }
 
-type NotEquals statement
+type NotEqualsX statement
 
-var _ Expression = (*NotEquals)(nil)
+var _ Expression = (*NotEqualsX)(nil)
 
-func NewNotEquals(param *Param, value Value) *NotEquals {
-	return &NotEquals{
+func NotEquals(param *ParamX, value Value) *NotEqualsX {
+	return &NotEqualsX{
 		Param: param,
 		Value: value,
 	}
 }
 
-func (e NotEquals) Equals(other Expression) bool {
-	if expr, ok := other.(*NotEquals); ok {
+func (e NotEqualsX) Equals(other Expression) bool {
+	if expr, ok := other.(*NotEqualsX); ok {
 		return e.Param.Equals(expr.Param) && e.Value.Equals(expr.Value)
 	}
 	return false
 }
 
-func (e NotEquals) String() string {
+func (e NotEqualsX) String() string {
 	return e.Param.String() + "!=" + e.Value.String()
 }
 
-func parseNotEquals(left, right interface{}) (*NotEquals, error) {
+func parseNotEquals(left, right interface{}) (*NotEqualsX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	return NewNotEquals(param, value), nil
+	return NotEquals(param, value), nil
 }

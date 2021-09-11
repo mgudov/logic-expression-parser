@@ -7,8 +7,8 @@ import (
 
 func TestParseStatement(t *testing.T) {
 	var (
-		p = NewParam("a")
-		v = NewInteger(1)
+		p = Param("a")
+		v = Integer(1)
 	)
 
 	type testParseStatement struct {
@@ -28,27 +28,27 @@ func TestParseStatement(t *testing.T) {
 		{
 			left:  nil,
 			right: v,
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), nil),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), nil),
 		},
 		{
 			left:  p,
 			right: nil,
-			err:   NewIncorrectType("parseStatement", (*Value)(nil), nil),
+			err:   IncorrectType("parseStatement", (*Value)(nil), nil),
 		},
 		{
 			left:  v,
 			right: v,
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), v),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), v),
 		},
 		{
 			left:  (*Expression)(nil),
 			right: v,
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), (*Expression)(nil)),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), (*Expression)(nil)),
 		},
 		{
 			left:  p,
 			right: (*Expression)(nil),
-			err:   NewIncorrectType("parseStatement", (*Value)(nil), (*Expression)(nil)),
+			err:   IncorrectType("parseStatement", (*Value)(nil), (*Expression)(nil)),
 		},
 	}
 

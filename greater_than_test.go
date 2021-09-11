@@ -14,41 +14,41 @@ func TestParseGreaterThan(t *testing.T) {
 	}
 	var tests = []testParseGreaterThan{
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(100),
+			left:   Param("a"),
+			right:  Integer(100),
 			result: `a>100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(-100),
+			left:   Param("a"),
+			right:  Integer(-100),
 			result: `a>-100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(12.345),
+			left:   Param("a"),
+			right:  Float(12.345),
 			result: `a>12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(-12.345),
+			left:   Param("a"),
+			right:  Float(-12.345),
 			result: `a>-12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewParam("b"),
+			left:   Param("a"),
+			right:  Param("b"),
 			result: `a>b`,
 		},
 		{
-			left:  NewInteger(1),
-			right: NewParam("b"),
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), (*Integer)(nil)),
+			left:  Integer(1),
+			right: Param("b"),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), (*IntegerX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		e, err := parseGreaterThan(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && e != nil {
-			assert.IsType(t, (*GreaterThan)(nil), e)
+			assert.IsType(t, (*GreaterThanX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
 			assert.Equal(t, tt.result, e.String())
@@ -67,41 +67,41 @@ func TestParseGreaterThanEqual(t *testing.T) {
 	}
 	var tests = []testParseGreaterThanEqual{
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(100),
+			left:   Param("a"),
+			right:  Integer(100),
 			result: `a>=100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(-100),
+			left:   Param("a"),
+			right:  Integer(-100),
 			result: `a>=-100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(12.345),
+			left:   Param("a"),
+			right:  Float(12.345),
 			result: `a>=12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(-12.345),
+			left:   Param("a"),
+			right:  Float(-12.345),
 			result: `a>=-12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewParam("b"),
+			left:   Param("a"),
+			right:  Param("b"),
 			result: `a>=b`,
 		},
 		{
-			left:  NewInteger(1),
-			right: NewParam("b"),
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), (*Integer)(nil)),
+			left:  Integer(1),
+			right: Param("b"),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), (*IntegerX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		e, err := parseGreaterThanEqual(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && e != nil {
-			assert.IsType(t, (*GreaterThanEqual)(nil), e)
+			assert.IsType(t, (*GreaterThanEqualX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
 			assert.Equal(t, tt.result, e.String())
@@ -119,23 +119,23 @@ func TestGreaterThan_Equals(t *testing.T) {
 	}
 	var tests = []testGreaterThanEquals{
 		{
-			e1:     NewGreaterThan(NewParam("a"), NewInteger(1000)),
-			e2:     NewGreaterThan(NewParam("a"), NewInteger(1000)),
+			e1:     GreaterThan(Param("a"), Integer(1000)),
+			e2:     GreaterThan(Param("a"), Integer(1000)),
 			result: true,
 		},
 		{
-			e1:     NewGreaterThan(NewParam("a"), NewFloat(12.345)),
-			e2:     NewGreaterThan(NewParam("a"), NewFloat(12.345)),
+			e1:     GreaterThan(Param("a"), Float(12.345)),
+			e2:     GreaterThan(Param("a"), Float(12.345)),
 			result: true,
 		},
 		{
-			e1:     NewGreaterThan(NewParam("a"), NewInteger(1000)),
-			e2:     NewGreaterThan(NewParam("a"), NewFloat(1000)),
+			e1:     GreaterThan(Param("a"), Integer(1000)),
+			e2:     GreaterThan(Param("a"), Float(1000)),
 			result: false,
 		},
 		{
-			e1:     NewGreaterThan(NewParam("a"), NewInteger(1000)),
-			e2:     NewEquals(NewParam("a"), NewInteger(1000)),
+			e1:     GreaterThan(Param("a"), Integer(1000)),
+			e2:     Equals(Param("a"), Integer(1000)),
 			result: false,
 		},
 	}
@@ -154,23 +154,23 @@ func TestGreaterThanEqual_Equals(t *testing.T) {
 	}
 	var tests = []testGreaterThanEqualEquals{
 		{
-			e1:     NewGreaterThanEqual(NewParam("a"), NewInteger(1000)),
-			e2:     NewGreaterThanEqual(NewParam("a"), NewInteger(1000)),
+			e1:     GreaterThanEqual(Param("a"), Integer(1000)),
+			e2:     GreaterThanEqual(Param("a"), Integer(1000)),
 			result: true,
 		},
 		{
-			e1:     NewGreaterThanEqual(NewParam("a"), NewFloat(12.345)),
-			e2:     NewGreaterThanEqual(NewParam("a"), NewFloat(12.345)),
+			e1:     GreaterThanEqual(Param("a"), Float(12.345)),
+			e2:     GreaterThanEqual(Param("a"), Float(12.345)),
 			result: true,
 		},
 		{
-			e1:     NewGreaterThanEqual(NewParam("a"), NewInteger(1000)),
-			e2:     NewGreaterThanEqual(NewParam("a"), NewFloat(1000)),
+			e1:     GreaterThanEqual(Param("a"), Integer(1000)),
+			e2:     GreaterThanEqual(Param("a"), Float(1000)),
 			result: false,
 		},
 		{
-			e1:     NewGreaterThanEqual(NewParam("a"), NewInteger(1000)),
-			e2:     NewEquals(NewParam("a"), NewInteger(1000)),
+			e1:     GreaterThanEqual(Param("a"), Integer(1000)),
+			e2:     Equals(Param("a"), Integer(1000)),
 			result: false,
 		},
 	}

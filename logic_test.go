@@ -7,11 +7,11 @@ import (
 
 func TestParseExpressions(t *testing.T) {
 	var (
-		e1 = NewEquals(NewParam("a"), NewString("foo"))
-		e2 = NewGreaterThan(NewParam("b"), NewInteger(100))
-		e3 = NewLessThan(NewParam("c"), NewFloat(12.34))
-		e4 = NewNotEquals(NewParam("d"), NewBoolean(true))
-		e5 = NewNotEquals(NewParam("e"), NewNull())
+		e1 = Equals(Param("a"), String("foo"))
+		e2 = GreaterThan(Param("b"), Integer(100))
+		e3 = LessThan(Param("c"), Float(12.34))
+		e4 = NotEquals(Param("d"), Boolean(true))
+		e5 = NotEquals(Param("e"), Null())
 	)
 
 	type testParseExpressions struct {
@@ -45,11 +45,11 @@ func TestParseExpressions(t *testing.T) {
 
 func TestParseAnd(t *testing.T) {
 	var (
-		e1 = NewEquals(NewParam("a"), NewString("foo"))
-		e2 = NewGreaterThan(NewParam("b"), NewInteger(100))
-		e3 = NewLessThan(NewParam("c"), NewFloat(12.34))
-		e4 = NewNotEquals(NewParam("d"), NewBoolean(true))
-		e5 = NewNotEquals(NewParam("e"), NewNull())
+		e1 = Equals(Param("a"), String("foo"))
+		e2 = GreaterThan(Param("b"), Integer(100))
+		e3 = LessThan(Param("c"), Float(12.34))
+		e4 = NotEquals(Param("d"), Boolean(true))
+		e5 = NotEquals(Param("e"), Null())
 	)
 
 	type testParseAnd struct {
@@ -59,27 +59,27 @@ func TestParseAnd(t *testing.T) {
 	var tests = []testParseAnd{
 		{
 			expr:   []interface{}{e1, e2, e3, e4, e5},
-			result: NewAnd(e1, e2, e3, e4, e5),
+			result: And(e1, e2, e3, e4, e5),
 		},
 		{
-			expr:   []interface{}{NewAnd(e1, e2), NewAnd(e3, e4, e5)},
-			result: NewAnd(e1, e2, e3, e4, e5),
+			expr:   []interface{}{And(e1, e2), And(e3, e4, e5)},
+			result: And(e1, e2, e3, e4, e5),
 		},
 		{
-			expr:   []interface{}{NewAnd(e1, e2), NewAnd(e3, e4, e5)},
-			result: NewAnd(NewAnd(e1, e2), NewAnd(e3, e4, e5)),
+			expr:   []interface{}{And(e1, e2), And(e3, e4, e5)},
+			result: And(And(e1, e2), And(e3, e4, e5)),
 		},
 		{
-			expr:   []interface{}{NewAnd(e1, e2), NewAnd(e3, e4, e5)},
-			result: NewAnd(NewAnd(e1, e2, e3), NewAnd(e4, e5)),
+			expr:   []interface{}{And(e1, e2), And(e3, e4, e5)},
+			result: And(And(e1, e2, e3), And(e4, e5)),
 		},
 		{
-			expr:   []interface{}{e1, e2, e3, NewOr(e4, e5)},
-			result: NewAnd(e1, e2, e3, NewOr(e4, e5)),
+			expr:   []interface{}{e1, e2, e3, Or(e4, e5)},
+			result: And(e1, e2, e3, Or(e4, e5)),
 		},
 		{
-			expr:   []interface{}{e1, e2, e3, NewOr(e4, e5)},
-			result: NewAnd(e1, e2, NewAnd(e3, NewOr(e4, e5))),
+			expr:   []interface{}{e1, e2, e3, Or(e4, e5)},
+			result: And(e1, e2, And(e3, Or(e4, e5))),
 		},
 	}
 
@@ -87,7 +87,7 @@ func TestParseAnd(t *testing.T) {
 		l, err := parseAnd(tt.expr...)
 		if assert.NoError(t, err) {
 			assert.Equal(t, tt.result, l)
-			assert.IsType(t, (*And)(nil), l)
+			assert.IsType(t, (*AndX)(nil), l)
 			assert.Equal(t, tt.result.String(), l.String())
 		}
 	}
@@ -95,11 +95,11 @@ func TestParseAnd(t *testing.T) {
 
 func TestParseOr(t *testing.T) {
 	var (
-		e1 = NewEquals(NewParam("a"), NewString("foo"))
-		e2 = NewGreaterThan(NewParam("b"), NewInteger(100))
-		e3 = NewLessThan(NewParam("c"), NewFloat(12.34))
-		e4 = NewNotEquals(NewParam("d"), NewBoolean(true))
-		e5 = NewNotEquals(NewParam("e"), NewNull())
+		e1 = Equals(Param("a"), String("foo"))
+		e2 = GreaterThan(Param("b"), Integer(100))
+		e3 = LessThan(Param("c"), Float(12.34))
+		e4 = NotEquals(Param("d"), Boolean(true))
+		e5 = NotEquals(Param("e"), Null())
 	)
 
 	type testParseOr struct {
@@ -109,27 +109,27 @@ func TestParseOr(t *testing.T) {
 	var tests = []testParseOr{
 		{
 			expr:   []interface{}{e1, e2, e3, e4, e5},
-			result: NewOr(e1, e2, e3, e4, e5),
+			result: Or(e1, e2, e3, e4, e5),
 		},
 		{
-			expr:   []interface{}{NewOr(e1, e2), NewOr(e3, e4, e5)},
-			result: NewOr(e1, e2, e3, e4, e5),
+			expr:   []interface{}{Or(e1, e2), Or(e3, e4, e5)},
+			result: Or(e1, e2, e3, e4, e5),
 		},
 		{
-			expr:   []interface{}{NewOr(e1, e2), NewOr(e3, e4, e5)},
-			result: NewOr(NewOr(e1, e2), NewOr(e3, e4, e5)),
+			expr:   []interface{}{Or(e1, e2), Or(e3, e4, e5)},
+			result: Or(Or(e1, e2), Or(e3, e4, e5)),
 		},
 		{
-			expr:   []interface{}{NewOr(e1, e2), NewOr(e3, e4, e5)},
-			result: NewOr(NewOr(e1, e2, e3), NewOr(e4, e5)),
+			expr:   []interface{}{Or(e1, e2), Or(e3, e4, e5)},
+			result: Or(Or(e1, e2, e3), Or(e4, e5)),
 		},
 		{
-			expr:   []interface{}{e1, e2, e3, NewAnd(e4, e5)},
-			result: NewOr(e1, e2, e3, NewAnd(e4, e5)),
+			expr:   []interface{}{e1, e2, e3, And(e4, e5)},
+			result: Or(e1, e2, e3, And(e4, e5)),
 		},
 		{
-			expr:   []interface{}{e1, e2, e3, NewAnd(e4, e5)},
-			result: NewOr(e1, e2, NewOr(e3, NewAnd(e4, e5))),
+			expr:   []interface{}{e1, e2, e3, And(e4, e5)},
+			result: Or(e1, e2, Or(e3, And(e4, e5))),
 		},
 	}
 
@@ -137,7 +137,7 @@ func TestParseOr(t *testing.T) {
 		l, err := parseOr(tt.expr...)
 		if assert.NoError(t, err) {
 			assert.Equal(t, tt.result, l)
-			assert.IsType(t, (*Or)(nil), l)
+			assert.IsType(t, (*OrX)(nil), l)
 			assert.Equal(t, l.String(), tt.result.String())
 		}
 	}
@@ -145,11 +145,11 @@ func TestParseOr(t *testing.T) {
 
 func TestAnd_Equals(t *testing.T) {
 	var (
-		e1 = NewEquals(NewParam("a"), NewString("foo"))
-		e2 = NewGreaterThan(NewParam("b"), NewInteger(100))
-		e3 = NewLessThan(NewParam("c"), NewFloat(12.34))
-		e4 = NewNotEquals(NewParam("d"), NewBoolean(true))
-		e5 = NewNotEquals(NewParam("e"), NewNull())
+		e1 = Equals(Param("a"), String("foo"))
+		e2 = GreaterThan(Param("b"), Integer(100))
+		e3 = LessThan(Param("c"), Float(12.34))
+		e4 = NotEquals(Param("d"), Boolean(true))
+		e5 = NotEquals(Param("e"), Null())
 	)
 
 	type testAndEquals struct {
@@ -159,28 +159,28 @@ func TestAnd_Equals(t *testing.T) {
 	}
 	var tests = []testAndEquals{
 		{
-			l1:     NewAnd(e1, e2, e3, e4, e5),
-			l2:     NewAnd(e1, e2, e3, e4, e5),
+			l1:     And(e1, e2, e3, e4, e5),
+			l2:     And(e1, e2, e3, e4, e5),
 			result: true,
 		},
 		{
-			l1:     NewAnd(e1, e2, e3, e4, e5),
-			l2:     NewAnd(NewAnd(e1, e2), NewAnd(e3, e4), e5),
+			l1:     And(e1, e2, e3, e4, e5),
+			l2:     And(And(e1, e2), And(e3, e4), e5),
 			result: true,
 		},
 		{
-			l1:     NewAnd(e1, e2, e3, e4, e5),
-			l2:     NewAnd(e1, e2, e3, e4),
+			l1:     And(e1, e2, e3, e4, e5),
+			l2:     And(e1, e2, e3, e4),
 			result: false,
 		},
 		{
-			l1:     NewAnd(e1, e2, e3, e4, e5),
-			l2:     NewAnd(NewAnd(e1, e2), NewAnd(e3, e4)),
+			l1:     And(e1, e2, e3, e4, e5),
+			l2:     And(And(e1, e2), And(e3, e4)),
 			result: false,
 		},
 		{
-			l1:     NewAnd(e1, e2, e3, e4, e5),
-			l2:     NewOr(e1, e2, e3, e4, e5),
+			l1:     And(e1, e2, e3, e4, e5),
+			l2:     Or(e1, e2, e3, e4, e5),
 			result: false,
 		},
 	}
@@ -193,11 +193,11 @@ func TestAnd_Equals(t *testing.T) {
 
 func TestOr_Equals(t *testing.T) {
 	var (
-		e1 = NewEquals(NewParam("a"), NewString("foo"))
-		e2 = NewGreaterThan(NewParam("b"), NewInteger(100))
-		e3 = NewLessThan(NewParam("c"), NewFloat(12.34))
-		e4 = NewNotEquals(NewParam("d"), NewBoolean(true))
-		e5 = NewNotEquals(NewParam("e"), NewNull())
+		e1 = Equals(Param("a"), String("foo"))
+		e2 = GreaterThan(Param("b"), Integer(100))
+		e3 = LessThan(Param("c"), Float(12.34))
+		e4 = NotEquals(Param("d"), Boolean(true))
+		e5 = NotEquals(Param("e"), Null())
 	)
 
 	type testOrEquals struct {
@@ -207,28 +207,28 @@ func TestOr_Equals(t *testing.T) {
 	}
 	var tests = []testOrEquals{
 		{
-			l1:     NewOr(e1, e2, e3, e4, e5),
-			l2:     NewOr(e1, e2, e3, e4, e5),
+			l1:     Or(e1, e2, e3, e4, e5),
+			l2:     Or(e1, e2, e3, e4, e5),
 			result: true,
 		},
 		{
-			l1:     NewOr(e1, e2, e3, e4, e5),
-			l2:     NewOr(NewOr(e1, e2), NewOr(e3, e4), e5),
+			l1:     Or(e1, e2, e3, e4, e5),
+			l2:     Or(Or(e1, e2), Or(e3, e4), e5),
 			result: true,
 		},
 		{
-			l1:     NewOr(e1, e2, e3, e4, e5),
-			l2:     NewOr(e1, e2, e3, e4),
+			l1:     Or(e1, e2, e3, e4, e5),
+			l2:     Or(e1, e2, e3, e4),
 			result: false,
 		},
 		{
-			l1:     NewOr(e1, e2, e3, e4, e5),
-			l2:     NewOr(NewOr(e1, e2), NewOr(e3, e4)),
+			l1:     Or(e1, e2, e3, e4, e5),
+			l2:     Or(Or(e1, e2), Or(e3, e4)),
 			result: false,
 		},
 		{
-			l1:     NewOr(e1, e2, e3, e4, e5),
-			l2:     NewAnd(e1, e2, e3, e4, e5),
+			l1:     Or(e1, e2, e3, e4, e5),
+			l2:     And(e1, e2, e3, e4, e5),
 			result: false,
 		},
 	}

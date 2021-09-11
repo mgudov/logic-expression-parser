@@ -14,41 +14,41 @@ func TestParseLessThan(t *testing.T) {
 	}
 	var tests = []testParseLessThan{
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(100),
+			left:   Param("a"),
+			right:  Integer(100),
 			result: `a<100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(-100),
+			left:   Param("a"),
+			right:  Integer(-100),
 			result: `a<-100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(12.345),
+			left:   Param("a"),
+			right:  Float(12.345),
 			result: `a<12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(-12.345),
+			left:   Param("a"),
+			right:  Float(-12.345),
 			result: `a<-12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewParam("b"),
+			left:   Param("a"),
+			right:  Param("b"),
 			result: `a<b`,
 		},
 		{
-			left:  NewInteger(1),
-			right: NewParam("b"),
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), (*Integer)(nil)),
+			left:  Integer(1),
+			right: Param("b"),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), (*IntegerX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		e, err := parseLessThan(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && e != nil {
-			assert.IsType(t, (*LessThan)(nil), e)
+			assert.IsType(t, (*LessThanX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
 			assert.Equal(t, tt.result, e.String())
@@ -67,41 +67,41 @@ func TestParseLessThanEqual(t *testing.T) {
 	}
 	var tests = []testParseLessThanEqual{
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(100),
+			left:   Param("a"),
+			right:  Integer(100),
 			result: `a<=100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(-100),
+			left:   Param("a"),
+			right:  Integer(-100),
 			result: `a<=-100`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(12.345),
+			left:   Param("a"),
+			right:  Float(12.345),
 			result: `a<=12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(-12.345),
+			left:   Param("a"),
+			right:  Float(-12.345),
 			result: `a<=-12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewParam("b"),
+			left:   Param("a"),
+			right:  Param("b"),
 			result: `a<=b`,
 		},
 		{
-			left:  NewInteger(1),
-			right: NewParam("b"),
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), (*Integer)(nil)),
+			left:  Integer(1),
+			right: Param("b"),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), (*IntegerX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		e, err := parseLessThanEqual(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && e != nil {
-			assert.IsType(t, (*LessThanEqual)(nil), e)
+			assert.IsType(t, (*LessThanEqualX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
 			assert.Equal(t, tt.result, e.String())
@@ -119,23 +119,23 @@ func TestLessThan_Equals(t *testing.T) {
 	}
 	var tests = []testLessThanEquals{
 		{
-			e1:     NewLessThan(NewParam("a"), NewInteger(1000)),
-			e2:     NewLessThan(NewParam("a"), NewInteger(1000)),
+			e1:     LessThan(Param("a"), Integer(1000)),
+			e2:     LessThan(Param("a"), Integer(1000)),
 			result: true,
 		},
 		{
-			e1:     NewLessThan(NewParam("a"), NewFloat(12.345)),
-			e2:     NewLessThan(NewParam("a"), NewFloat(12.345)),
+			e1:     LessThan(Param("a"), Float(12.345)),
+			e2:     LessThan(Param("a"), Float(12.345)),
 			result: true,
 		},
 		{
-			e1:     NewLessThan(NewParam("a"), NewInteger(1000)),
-			e2:     NewLessThan(NewParam("a"), NewFloat(1000)),
+			e1:     LessThan(Param("a"), Integer(1000)),
+			e2:     LessThan(Param("a"), Float(1000)),
 			result: false,
 		},
 		{
-			e1:     NewLessThan(NewParam("a"), NewInteger(1000)),
-			e2:     NewEquals(NewParam("a"), NewInteger(1000)),
+			e1:     LessThan(Param("a"), Integer(1000)),
+			e2:     Equals(Param("a"), Integer(1000)),
 			result: false,
 		},
 	}
@@ -154,23 +154,23 @@ func TestLessThanEqual_Equals(t *testing.T) {
 	}
 	var tests = []testGreaterThanEqualEquals{
 		{
-			e1:     NewLessThanEqual(NewParam("a"), NewInteger(1000)),
-			e2:     NewLessThanEqual(NewParam("a"), NewInteger(1000)),
+			e1:     LessThanEqual(Param("a"), Integer(1000)),
+			e2:     LessThanEqual(Param("a"), Integer(1000)),
 			result: true,
 		},
 		{
-			e1:     NewLessThanEqual(NewParam("a"), NewFloat(12.345)),
-			e2:     NewLessThanEqual(NewParam("a"), NewFloat(12.345)),
+			e1:     LessThanEqual(Param("a"), Float(12.345)),
+			e2:     LessThanEqual(Param("a"), Float(12.345)),
 			result: true,
 		},
 		{
-			e1:     NewLessThanEqual(NewParam("a"), NewInteger(1000)),
-			e2:     NewLessThanEqual(NewParam("a"), NewFloat(1000)),
+			e1:     LessThanEqual(Param("a"), Integer(1000)),
+			e2:     LessThanEqual(Param("a"), Float(1000)),
 			result: false,
 		},
 		{
-			e1:     NewLessThanEqual(NewParam("a"), NewInteger(1000)),
-			e2:     NewEquals(NewParam("a"), NewInteger(1000)),
+			e1:     LessThanEqual(Param("a"), Integer(1000)),
+			e2:     Equals(Param("a"), Integer(1000)),
 			result: false,
 		},
 	}

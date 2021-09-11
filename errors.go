@@ -8,7 +8,7 @@ type ErrIncorrectType struct {
 	Received interface{}
 }
 
-func NewIncorrectType(funcName string, expected, received interface{}) error {
+func IncorrectType(funcName string, expected, received interface{}) error {
 	return ErrIncorrectType{
 		FuncName: funcName,
 		Expected: expected,
@@ -26,7 +26,7 @@ type ErrIncorrectValue struct {
 	Received interface{}
 }
 
-func NewIncorrectValue(funcName string, expected, received interface{}) error {
+func IncorrectValue(funcName string, expected, received interface{}) error {
 	return ErrIncorrectValue{
 		FuncName: funcName,
 		Expected: expected,

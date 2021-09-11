@@ -4,18 +4,18 @@ import (
 	"strings"
 )
 
-type Slice struct {
+type SliceX struct {
 	Values []Value
 }
 
-var _ Value = (*Slice)(nil)
+var _ Value = (*SliceX)(nil)
 
-func NewSlice(values ...Value) *Slice {
-	return &Slice{Values: values}
+func Slice(values ...Value) *SliceX {
+	return &SliceX{Values: values}
 }
 
-func (e Slice) Equals(other Expression) bool {
-	if expr, ok := other.(*Slice); ok {
+func (e SliceX) Equals(other Expression) bool {
+	if expr, ok := other.(*SliceX); ok {
 		if len(e.Values) != len(expr.Values) {
 			return false
 		}
@@ -29,7 +29,7 @@ func (e Slice) Equals(other Expression) bool {
 	return false
 }
 
-func (e Slice) String() string {
+func (e SliceX) String() string {
 	var items []string
 	for _, value := range e.Values {
 		items = append(items, value.String())
@@ -37,90 +37,90 @@ func (e Slice) String() string {
 	return "[" + strings.Join(items, ",") + "]"
 }
 
-func (e Slice) Value() interface{} {
+func (e SliceX) Value() interface{} {
 	return e.Values
 }
 
-func parseSlice(items ...interface{}) (*Slice, error) {
+func parseSlice(items ...interface{}) (*SliceX, error) {
 	var values []Value
 	for _, e := range parseExpressions(items...) {
 		if v, ok := e.(Value); ok {
 			values = append(values, v)
 		}
 	}
-	return NewSlice(values...), nil
+	return Slice(values...), nil
 }
 
-type InSlice struct {
-	Param *Param
-	Slice *Slice
+type InSliceX struct {
+	Param *ParamX
+	Slice *SliceX
 }
 
-var _ Expression = (*InSlice)(nil)
+var _ Expression = (*InSliceX)(nil)
 
-func NewInSlice(param *Param, slice *Slice) *InSlice {
-	return &InSlice{
+func InSlice(param *ParamX, slice *SliceX) *InSliceX {
+	return &InSliceX{
 		Param: param,
 		Slice: slice,
 	}
 }
 
-func (e InSlice) Equals(other Expression) bool {
-	if expr, ok := other.(*InSlice); ok {
+func (e InSliceX) Equals(other Expression) bool {
+	if expr, ok := other.(*InSliceX); ok {
 		return e.Param.Equals(expr.Param) && e.Slice.Equals(expr.Slice)
 	}
 	return false
 }
 
-func (e InSlice) String() string {
+func (e InSliceX) String() string {
 	return e.Param.String() + " in " + e.Slice.String()
 }
 
-func parseInSlice(left, right interface{}) (*InSlice, error) {
+func parseInSlice(left, right interface{}) (*InSliceX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	slice, ok := value.(*Slice)
+	slice, ok := value.(*SliceX)
 	if !ok {
-		return nil, NewIncorrectType("parseInSlice", (*Slice)(nil), value)
+		return nil, IncorrectType("parseInSlice", (*SliceX)(nil), value)
 	}
-	return NewInSlice(param, slice), nil
+	return InSlice(param, slice), nil
 }
 
-type NotInSlice struct {
-	Param *Param
-	Slice *Slice
+type NotInSliceX struct {
+	Param *ParamX
+	Slice *SliceX
 }
 
-var _ Expression = (*NotInSlice)(nil)
+var _ Expression = (*NotInSliceX)(nil)
 
-func NewNotInSlice(param *Param, slice *Slice) *NotInSlice {
-	return &NotInSlice{
+func NotInSlice(param *ParamX, slice *SliceX) *NotInSliceX {
+	return &NotInSliceX{
 		Param: param,
 		Slice: slice,
 	}
 }
 
-func (e NotInSlice) Equals(other Expression) bool {
-	if expr, ok := other.(*NotInSlice); ok {
+func (e NotInSliceX) Equals(other Expression) bool {
+	if expr, ok := other.(*NotInSliceX); ok {
 		return e.Param.Equals(expr.Param) && e.Slice.Equals(expr.Slice)
 	}
 	return false
 }
 
-func (e NotInSlice) String() string {
+func (e NotInSliceX) String() string {
 	return e.Param.String() + " not_in " + e.Slice.String()
 }
 
-func parseNotInSlice(left, right interface{}) (*NotInSlice, error) {
+func parseNotInSlice(left, right interface{}) (*NotInSliceX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	slice, ok := value.(*Slice)
+	slice, ok := value.(*SliceX)
 	if !ok {
-		return nil, NewIncorrectType("parseNotInSlice", (*Slice)(nil), value)
+		return nil, IncorrectType("parseNotInSlice", (*SliceX)(nil), value)
 	}
-	return NewNotInSlice(param, slice), nil
+	return NotInSlice(param, slice), nil
 }

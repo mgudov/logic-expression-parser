@@ -1,61 +1,61 @@
 package lep
 
-type LessThan statement
+type LessThanX statement
 
-var _ Expression = (*LessThan)(nil)
+var _ Expression = (*LessThanX)(nil)
 
-func NewLessThan(param *Param, value Value) *LessThan {
-	return &LessThan{
+func LessThan(param *ParamX, value Value) *LessThanX {
+	return &LessThanX{
 		Param: param,
 		Value: value,
 	}
 }
 
-func (s LessThan) Equals(other Expression) bool {
-	if expr, ok := other.(*LessThan); ok {
+func (s LessThanX) Equals(other Expression) bool {
+	if expr, ok := other.(*LessThanX); ok {
 		return s.Param.Equals(expr.Param) && s.Value.Equals(expr.Value)
 	}
 	return false
 }
 
-func (s LessThan) String() string {
+func (s LessThanX) String() string {
 	return s.Param.String() + "<" + s.Value.String()
 }
 
-func parseLessThan(left, right interface{}) (*LessThan, error) {
+func parseLessThan(left, right interface{}) (*LessThanX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	return NewLessThan(param, value), nil
+	return LessThan(param, value), nil
 }
 
-type LessThanEqual statement
+type LessThanEqualX statement
 
-var _ Expression = (*LessThanEqual)(nil)
+var _ Expression = (*LessThanEqualX)(nil)
 
-func NewLessThanEqual(param *Param, value Value) *LessThanEqual {
-	return &LessThanEqual{
+func LessThanEqual(param *ParamX, value Value) *LessThanEqualX {
+	return &LessThanEqualX{
 		Param: param,
 		Value: value,
 	}
 }
 
-func (s LessThanEqual) Equals(other Expression) bool {
-	if expr, ok := other.(*LessThanEqual); ok {
+func (s LessThanEqualX) Equals(other Expression) bool {
+	if expr, ok := other.(*LessThanEqualX); ok {
 		return s.Param.Equals(expr.Param) && s.Value.Equals(expr.Value)
 	}
 	return false
 }
 
-func (s LessThanEqual) String() string {
+func (s LessThanEqualX) String() string {
 	return s.Param.String() + "<=" + s.Value.String()
 }
 
-func parseLessThanEqual(left, right interface{}) (*LessThanEqual, error) {
+func parseLessThanEqual(left, right interface{}) (*LessThanEqualX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	return NewLessThanEqual(param, value), nil
+	return LessThanEqual(param, value), nil
 }

@@ -14,36 +14,36 @@ func TestParseEquals(t *testing.T) {
 	}
 	var tests = []testParseEquals{
 		{
-			left:   NewParam("a"),
-			right:  NewString("foo"),
+			left:   Param("a"),
+			right:  String("foo"),
 			result: `a="foo"`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(1000),
+			left:   Param("a"),
+			right:  Integer(1000),
 			result: `a=1000`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(12.345),
+			left:   Param("a"),
+			right:  Float(12.345),
 			result: `a=12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewParam("b"),
+			left:   Param("a"),
+			right:  Param("b"),
 			result: `a=b`,
 		},
 		{
-			left:  NewInteger(1),
-			right: NewParam("b"),
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), (*Integer)(nil)),
+			left:  Integer(1),
+			right: Param("b"),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), (*IntegerX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		e, err := parseEquals(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && e != nil {
-			assert.IsType(t, (*Equals)(nil), e)
+			assert.IsType(t, (*EqualsX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
 			assert.Equal(t, tt.result, e.String())
@@ -62,36 +62,36 @@ func TestParseNotEquals(t *testing.T) {
 	}
 	var tests = []testParseNotEquals{
 		{
-			left:   NewParam("a"),
-			right:  NewString("foo"),
+			left:   Param("a"),
+			right:  String("foo"),
 			result: `a!="foo"`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewInteger(1000),
+			left:   Param("a"),
+			right:  Integer(1000),
 			result: `a!=1000`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewFloat(12.345),
+			left:   Param("a"),
+			right:  Float(12.345),
 			result: `a!=12.345`,
 		},
 		{
-			left:   NewParam("a"),
-			right:  NewParam("b"),
+			left:   Param("a"),
+			right:  Param("b"),
 			result: `a!=b`,
 		},
 		{
-			left:  NewInteger(1),
-			right: NewParam("b"),
-			err:   NewIncorrectType("parseStatement", (*Param)(nil), (*Integer)(nil)),
+			left:  Integer(1),
+			right: Param("b"),
+			err:   IncorrectType("parseStatement", (*ParamX)(nil), (*IntegerX)(nil)),
 		},
 	}
 
 	for _, tt := range tests {
 		e, err := parseNotEquals(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) && e != nil {
-			assert.IsType(t, (*NotEquals)(nil), e)
+			assert.IsType(t, (*NotEqualsX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
 			assert.Equal(t, tt.result, e.String())
@@ -109,28 +109,28 @@ func TestEquals_Equals(t *testing.T) {
 	}
 	var tests = []testEqualsEquals{
 		{
-			e1:     NewEquals(NewParam("a"), NewString("foo")),
-			e2:     NewEquals(NewParam("a"), NewString("foo")),
+			e1:     Equals(Param("a"), String("foo")),
+			e2:     Equals(Param("a"), String("foo")),
 			result: true,
 		},
 		{
-			e1:     NewEquals(NewParam("a"), NewInteger(100)),
-			e2:     NewEquals(NewParam("a"), NewInteger(100)),
+			e1:     Equals(Param("a"), Integer(100)),
+			e2:     Equals(Param("a"), Integer(100)),
 			result: true,
 		},
 		{
-			e1:     NewEquals(NewParam("a"), NewString("foo")),
-			e2:     NewEquals(NewParam("a"), NewString("bar")),
+			e1:     Equals(Param("a"), String("foo")),
+			e2:     Equals(Param("a"), String("bar")),
 			result: false,
 		},
 		{
-			e1:     NewEquals(NewParam("a"), NewInteger(100)),
-			e2:     NewEquals(NewParam("a"), NewFloat(100)),
+			e1:     Equals(Param("a"), Integer(100)),
+			e2:     Equals(Param("a"), Float(100)),
 			result: false,
 		},
 		{
-			e1:     NewEquals(NewParam("a"), NewInteger(100)),
-			e2:     NewInteger(100),
+			e1:     Equals(Param("a"), Integer(100)),
+			e2:     Integer(100),
 			result: false,
 		},
 	}
@@ -149,28 +149,28 @@ func TestNotEquals_Equals(t *testing.T) {
 	}
 	var tests = []testNotEqualsEquals{
 		{
-			e1:     NewNotEquals(NewParam("a"), NewString("foo")),
-			e2:     NewNotEquals(NewParam("a"), NewString("foo")),
+			e1:     NotEquals(Param("a"), String("foo")),
+			e2:     NotEquals(Param("a"), String("foo")),
 			result: true,
 		},
 		{
-			e1:     NewNotEquals(NewParam("a"), NewInteger(100)),
-			e2:     NewNotEquals(NewParam("a"), NewInteger(100)),
+			e1:     NotEquals(Param("a"), Integer(100)),
+			e2:     NotEquals(Param("a"), Integer(100)),
 			result: true,
 		},
 		{
-			e1:     NewNotEquals(NewParam("a"), NewString("foo")),
-			e2:     NewNotEquals(NewParam("a"), NewString("bar")),
+			e1:     NotEquals(Param("a"), String("foo")),
+			e2:     NotEquals(Param("a"), String("bar")),
 			result: false,
 		},
 		{
-			e1:     NewNotEquals(NewParam("a"), NewInteger(100)),
-			e2:     NewNotEquals(NewParam("a"), NewFloat(100)),
+			e1:     NotEquals(Param("a"), Integer(100)),
+			e2:     NotEquals(Param("a"), Float(100)),
 			result: false,
 		},
 		{
-			e1:     NewNotEquals(NewParam("a"), NewInteger(100)),
-			e2:     NewInteger(100),
+			e1:     NotEquals(Param("a"), Integer(100)),
+			e2:     Integer(100),
 			result: false,
 		},
 	}

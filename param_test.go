@@ -28,7 +28,7 @@ func TestParseParam(t *testing.T) {
 	for _, tt := range tests {
 		p, err := parseParam(tt.raw)
 		if assert.NoError(t, err) {
-			assert.IsType(t, (*Param)(nil), p)
+			assert.IsType(t, (*ParamX)(nil), p)
 			assert.Equal(t, tt.result, p.Name)
 			assert.Equal(t, tt.result, p.Value())
 			assert.Equal(t, tt.result, p.String())
@@ -44,18 +44,18 @@ func TestParam_Equals(t *testing.T) {
 	}
 	var tests = []testParamEquals{
 		{
-			p1:     NewParam("a"),
-			p2:     NewParam("a"),
+			p1:     Param("a"),
+			p2:     Param("a"),
 			result: true,
 		},
 		{
-			p1:     NewParam("a"),
-			p2:     NewParam("b"),
+			p1:     Param("a"),
+			p2:     Param("b"),
 			result: false,
 		},
 		{
-			p1:     NewParam("a"),
-			p2:     NewString("a"),
+			p1:     Param("a"),
+			p2:     String("a"),
 			result: false,
 		},
 	}

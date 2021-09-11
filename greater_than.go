@@ -1,61 +1,61 @@
 package lep
 
-type GreaterThan statement
+type GreaterThanX statement
 
-var _ Expression = (*GreaterThan)(nil)
+var _ Expression = (*GreaterThanX)(nil)
 
-func NewGreaterThan(param *Param, value Value) *GreaterThan {
-	return &GreaterThan{
+func GreaterThan(param *ParamX, value Value) *GreaterThanX {
+	return &GreaterThanX{
 		Param: param,
 		Value: value,
 	}
 }
 
-func (s GreaterThan) Equals(other Expression) bool {
-	if expr, ok := other.(*GreaterThan); ok {
+func (s GreaterThanX) Equals(other Expression) bool {
+	if expr, ok := other.(*GreaterThanX); ok {
 		return s.Param.Equals(expr.Param) && s.Value.Equals(expr.Value)
 	}
 	return false
 }
 
-func (s GreaterThan) String() string {
+func (s GreaterThanX) String() string {
 	return s.Param.String() + ">" + s.Value.String()
 }
 
-func parseGreaterThan(left, right interface{}) (*GreaterThan, error) {
+func parseGreaterThan(left, right interface{}) (*GreaterThanX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	return NewGreaterThan(param, value), nil
+	return GreaterThan(param, value), nil
 }
 
-type GreaterThanEqual statement
+type GreaterThanEqualX statement
 
-var _ Expression = (*GreaterThanEqual)(nil)
+var _ Expression = (*GreaterThanEqualX)(nil)
 
-func NewGreaterThanEqual(param *Param, value Value) *GreaterThanEqual {
-	return &GreaterThanEqual{
+func GreaterThanEqual(param *ParamX, value Value) *GreaterThanEqualX {
+	return &GreaterThanEqualX{
 		Param: param,
 		Value: value,
 	}
 }
 
-func (s GreaterThanEqual) Equals(other Expression) bool {
-	if expr, ok := other.(*GreaterThanEqual); ok {
+func (s GreaterThanEqualX) Equals(other Expression) bool {
+	if expr, ok := other.(*GreaterThanEqualX); ok {
 		return s.Param.Equals(expr.Param) && s.Value.Equals(expr.Value)
 	}
 	return false
 }
 
-func (s GreaterThanEqual) String() string {
+func (s GreaterThanEqualX) String() string {
 	return s.Param.String() + ">=" + s.Value.String()
 }
 
-func parseGreaterThanEqual(left, right interface{}) (*GreaterThanEqual, error) {
+func parseGreaterThanEqual(left, right interface{}) (*GreaterThanEqualX, error) {
 	param, value, err := parseStatement(left, right)
 	if err != nil {
 		return nil, err
 	}
-	return NewGreaterThanEqual(param, value), nil
+	return GreaterThanEqual(param, value), nil
 }

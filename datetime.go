@@ -5,39 +5,39 @@ import (
 	"time"
 )
 
-type DateTime struct {
+type DateTimeX struct {
 	Val    time.Time
 	Format string
 }
 
-var _ Value = (*DateTime)(nil)
+var _ Value = (*DateTimeX)(nil)
 
-func NewDateTime(dt time.Time, format string) *DateTime {
-	return &DateTime{
+func DateTime(dt time.Time, format string) *DateTimeX {
+	return &DateTimeX{
 		Val:    dt,
 		Format: format,
 	}
 }
 
-func (v DateTime) Equals(other Expression) bool {
-	if expr, ok := other.(*DateTime); ok {
+func (v DateTimeX) Equals(other Expression) bool {
+	if expr, ok := other.(*DateTimeX); ok {
 		return v.Val == expr.Val
 	}
 	return false
 }
 
-func (v DateTime) String() string {
+func (v DateTimeX) String() string {
 	return `dt:"` + v.Val.Format(v.Format) + `"`
 }
 
-func (v DateTime) Value() interface{} {
+func (v DateTimeX) Value() interface{} {
 	return v.Val
 }
 
-func parseDateTime(val interface{}) (*DateTime, error) {
-	strVal, ok := val.(*String)
+func parseDateTime(val interface{}) (*DateTimeX, error) {
+	strVal, ok := val.(*StringX)
 	if !ok {
-		return nil, NewIncorrectType("parseDateTime", (*String)(nil), val)
+		return nil, IncorrectType("parseDateTime", (*StringX)(nil), val)
 	}
 	format, err := dateparse.ParseFormat(strVal.Val)
 	if err != nil {
@@ -45,5 +45,5 @@ func parseDateTime(val interface{}) (*DateTime, error) {
 	}
 
 	dt, _ := time.Parse(format, strVal.Val)
-	return NewDateTime(dt, format), nil
+	return DateTime(dt, format), nil
 }

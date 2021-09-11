@@ -6,119 +6,119 @@ import (
 	"strings"
 )
 
-type String struct {
+type StringX struct {
 	Val string
 }
 
-var _ Value = (*String)(nil)
+var _ Value = (*StringX)(nil)
 
-func NewString(val string) *String {
-	return &String{Val: val}
+func String(val string) *StringX {
+	return &StringX{Val: val}
 }
 
-func (s String) Equals(other Expression) bool {
-	if expr, ok := other.(*String); ok {
+func (s StringX) Equals(other Expression) bool {
+	if expr, ok := other.(*StringX); ok {
 		return s.Val == expr.Val
 	}
 	return false
 }
 
-func (s String) String() string {
+func (s StringX) String() string {
 	return `"` + s.Val + `"`
 }
 
-func (s String) Value() interface{} {
+func (s StringX) Value() interface{} {
 	return s.Val
 }
 
-func parseString(b []byte) (*String, error) {
-	return NewString(strings.Trim(string(b), ` "`)), nil
+func parseString(b []byte) (*StringX, error) {
+	return String(strings.Trim(string(b), ` "`)), nil
 }
 
-type Integer struct {
+type IntegerX struct {
 	Val int64
 }
 
-var _ Value = (*Integer)(nil)
+var _ Value = (*IntegerX)(nil)
 
-func NewInteger(val int64) *Integer {
-	return &Integer{Val: val}
+func Integer(val int64) *IntegerX {
+	return &IntegerX{Val: val}
 }
 
-func (i Integer) Equals(other Expression) bool {
-	if expr, ok := other.(*Integer); ok {
+func (i IntegerX) Equals(other Expression) bool {
+	if expr, ok := other.(*IntegerX); ok {
 		return i.Val == expr.Val
 	}
 	return false
 }
 
-func (i Integer) String() string {
+func (i IntegerX) String() string {
 	return fmt.Sprintf("%d", i.Val)
 }
 
-func (i Integer) Value() interface{} {
+func (i IntegerX) Value() interface{} {
 	return i.Val
 }
 
-func parseInteger(b []byte) (*Integer, error) {
+func parseInteger(b []byte) (*IntegerX, error) {
 	val, err := strconv.ParseInt(strings.TrimSpace(string(b)), 10, 64)
 	if err != nil {
 		return nil, err
 	}
-	return NewInteger(val), nil
+	return Integer(val), nil
 }
 
-type Float struct {
+type FloatX struct {
 	Val float64
 }
 
-var _ Value = (*Float)(nil)
+var _ Value = (*FloatX)(nil)
 
-func NewFloat(val float64) *Float {
-	return &Float{Val: val}
+func Float(val float64) *FloatX {
+	return &FloatX{Val: val}
 }
 
-func (f Float) Equals(other Expression) bool {
-	if expr, ok := other.(*Float); ok {
+func (f FloatX) Equals(other Expression) bool {
+	if expr, ok := other.(*FloatX); ok {
 		return f.Val == expr.Val
 	}
 	return false
 }
 
-func (f Float) String() string {
+func (f FloatX) String() string {
 	return strings.TrimRight(fmt.Sprintf("%f", f.Val), "0")
 }
 
-func (f Float) Value() interface{} {
+func (f FloatX) Value() interface{} {
 	return f.Val
 }
 
-func parseFloat(b []byte) (*Float, error) {
+func parseFloat(b []byte) (*FloatX, error) {
 	val, err := strconv.ParseFloat(strings.TrimSpace(string(b)), 64)
 	if err != nil {
 		return nil, err
 	}
-	return NewFloat(val), nil
+	return Float(val), nil
 }
 
-type Boolean struct {
+type BooleanX struct {
 	Val bool
 }
 
-var _ Value = (*Boolean)(nil)
+var _ Value = (*BooleanX)(nil)
 
-func NewBoolean(val bool) *Boolean {
-	return &Boolean{Val: val}
+func Boolean(val bool) *BooleanX {
+	return &BooleanX{Val: val}
 }
 
-func (v Boolean) Equals(other Expression) bool {
-	if expr, ok := other.(*Boolean); ok {
+func (v BooleanX) Equals(other Expression) bool {
+	if expr, ok := other.(*BooleanX); ok {
 		return v.Val == expr.Val
 	}
 	return false
 }
 
-func (v Boolean) String() string {
+func (v BooleanX) String() string {
 	if v.Val {
 		return "true"
 	} else {
@@ -126,42 +126,42 @@ func (v Boolean) String() string {
 	}
 }
 
-func parseBoolean(b []byte) (*Boolean, error) {
+func parseBoolean(b []byte) (*BooleanX, error) {
 	switch val := strings.TrimSpace(string(b)); val {
 	default:
-		return nil, NewIncorrectValue("parseBoolean", "(true/false)", val)
+		return nil, IncorrectValue("parseBoolean", "(true/false)", val)
 	case "true":
-		return NewBoolean(true), nil
+		return Boolean(true), nil
 	case "false":
-		return NewBoolean(false), nil
+		return Boolean(false), nil
 	}
 }
 
-func (v Boolean) Value() interface{} {
+func (v BooleanX) Value() interface{} {
 	return v.Val
 }
 
-type Null struct{}
+type NullX struct{}
 
-var _ Value = (*Null)(nil)
+var _ Value = (*NullX)(nil)
 
-func NewNull() *Null {
-	return &Null{}
+func Null() *NullX {
+	return &NullX{}
 }
 
-func (Null) Equals(other Expression) bool {
-	_, ok := other.(*Null)
+func (NullX) Equals(other Expression) bool {
+	_, ok := other.(*NullX)
 	return ok
 }
 
-func (Null) String() string {
+func (NullX) String() string {
 	return "null"
 }
 
-func (Null) Value() interface{} {
+func (NullX) Value() interface{} {
 	return nil
 }
 
-func parseNull() (*Null, error) {
-	return NewNull(), nil
+func parseNull() (*NullX, error) {
+	return Null(), nil
 }

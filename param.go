@@ -2,31 +2,31 @@ package lep
 
 import "strings"
 
-type Param struct {
+type ParamX struct {
 	Name string
 }
 
-var _ Value = (*Param)(nil)
+var _ Value = (*ParamX)(nil)
 
-func NewParam(name string) *Param {
-	return &Param{Name: name}
+func Param(name string) *ParamX {
+	return &ParamX{Name: name}
 }
 
-func (p Param) Equals(other Expression) bool {
-	if expr, ok := other.(*Param); ok {
+func (p ParamX) Equals(other Expression) bool {
+	if expr, ok := other.(*ParamX); ok {
 		return p.Name == expr.Name
 	}
 	return false
 }
 
-func (p Param) String() string {
+func (p ParamX) String() string {
 	return p.Name
 }
 
-func (p Param) Value() interface{} {
+func (p ParamX) Value() interface{} {
 	return p.Name
 }
 
-func parseParam(b []byte) (*Param, error) {
-	return NewParam(strings.TrimSpace(string(b))), nil
+func parseParam(b []byte) (*ParamX, error) {
+	return Param(strings.TrimSpace(string(b))), nil
 }
