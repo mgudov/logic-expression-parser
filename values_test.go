@@ -23,6 +23,10 @@ func TestParseString(t *testing.T) {
 			result: `foo bar`,
 		},
 		{
+			raw:    []byte(`"foo "bar""`),
+			result: `foo "bar"`,
+		},
+		{
 			raw:    []byte(`    "foo bar"    `),
 			result: `foo bar`,
 		},

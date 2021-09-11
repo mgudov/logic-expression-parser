@@ -140,14 +140,14 @@ goos: darwin
 goarch: amd64
 pkg: github.com/mgudov/logic-expression-parser
 cpu: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
-BenchmarkSmallQuery-12             	   22050	     57427 ns/op	   20600 B/op	     343 allocs/op
-BenchmarkMediumQuery-12            	   16213	     77054 ns/op	   32560 B/op	     572 allocs/op
-BenchmarkLargeQuery-12             	    4184	    320364 ns/op	  114753 B/op	    2144 allocs/op
-BenchmarkSmallQueryWithMemo-12     	   10000	    100139 ns/op	   95046 B/op	     284 allocs/op
-BenchmarkMediumQueryWithMemo-12    	    5685	    233060 ns/op	  214027 B/op	     632 allocs/op
-BenchmarkLargeQueryWithMemo-12     	    2136	    561411 ns/op	  514323 B/op	    1417 allocs/op
+BenchmarkSmallQuery-12                     27211             42736 ns/op           20504 B/op        339 allocs/op
+BenchmarkMediumQuery-12                    16160             72034 ns/op           32370 B/op        564 allocs/op
+BenchmarkLargeQuery-12                      4066            286038 ns/op          114507 B/op       2134 allocs/op
+BenchmarkSmallQueryWithMemo-12             13236             91061 ns/op           95044 B/op        283 allocs/op
+BenchmarkMediumQueryWithMemo-12             4762            218919 ns/op          213942 B/op        626 allocs/op
+BenchmarkLargeQueryWithMemo-12              1881            549937 ns/op          514177 B/op       1413 allocs/op
 PASS
-ok  	github.com/mgudov/logic-expression-parser	8.928s
+ok      github.com/mgudov/logic-expression-parser       9.347s
 ```
 
 ## Used Libraries

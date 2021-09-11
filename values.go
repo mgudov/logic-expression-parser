@@ -32,7 +32,10 @@ func (s StringX) Value() interface{} {
 }
 
 func parseString(b []byte) (*StringX, error) {
-	return String(strings.Trim(string(b), ` "`)), nil
+	val := strings.TrimSpace(string(b))
+	val = strings.TrimPrefix(val, `"`)
+	val = strings.TrimSuffix(val, `"`)
+	return String(val), nil
 }
 
 type IntegerX struct {
