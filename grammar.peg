@@ -1,0 +1,38 @@
+{
+// https://github.com/mna/pigeon
+
+package lep
+}
+
+Input <- expr:Expr EOF { return expr, nil }
+Bracket <- _ '(' _ expr:Expr _ ')' _ { return expr, nil }
+Expr <- _ expr:(Or / And / Bracket / Statements) _ { return expr, nil }
+Param <- [a-zA-Z] [a-zA-Z0-9_.]* { return parseParam(c.text) }
+
+// Values
+Values <- val:(Null / Boolean / Float / Integer / DateTime / String) { return val, nil }
+Null <- "null" { return parseNull() }
+Boolean <- ("true" / "false") { return parseBoolean(c.text) }
+Float <- '-'? [0-9]+[.][0-9]+ { return parseFloat(c.text) }
+Integer <- '-'? [0-9]+ { return parseInteger(c.text) }
+String <- '"' [^"]+ '"' { return parseString(c.text) }
+DateTime <- "dt:" val:(String) { return parseDateTime(val) }
+Slice <- '[' elements:(Values / ',')+ ']' { return parseSlice(elements) }
+
+// Statements
+Statements <- expr:(NotEqual / Equal / GreaterThanEqual / GreaterThan / LessThanEqual / LessThan / InSlice / NotInSlice) { return expr, nil }
+Equal <- left:(Param) _ "=" _ right:(Values / Param) { return parseEquals(left, right) }
+NotEqual <- left:(Param) _ "!=" _ right:(Values / Param) { return parseNotEquals(left, right) }
+LessThan <- left:(Param) _ "<" _ right:(Values / Param) { return parseLessThan(left, right) }
+LessThanEqual <- left:(Param) _ "<=" _ right:(Values / Param) { return parseLessThanEqual(left, right) }
+GreaterThan <- left:(Param) _ ">" _ right:(Values / Param) { return parseGreaterThan(left, right) }
+GreaterThanEqual <- left:(Param) _ ">=" _ right:(Values / Param) { return parseGreaterThanEqual(left, right) }
+InSlice <- left:(Param) " in " right:(Slice) { return parseInSlice(left, right) }
+NotInSlice <- left:(Param) " not_in " right:(Slice) { return parseNotInSlice(left, right) }
+
+// Logic
+And <- first:(Bracket / Statements) rest:(_ "&&" _ (Bracket / Statements))+ { return parseAnd(first, rest) }
+Or <- first:(And / Bracket / Statements) rest:(_ "||" _ (And / Bracket / Statements))+ { return parseOr(first, rest) }
+
+_ "whitespace" <- [ \n\t\r]*
+EOF <- !.
