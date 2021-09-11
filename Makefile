@@ -5,7 +5,7 @@ install:
 	go install github.com/mna/pigeon@latest
 
 bench:
-	go test -bench=. -benchmem
+	go test -benchmem -bench=.
 
 test:
-	go test ./. -v -cover
+	go test -v -cover .
