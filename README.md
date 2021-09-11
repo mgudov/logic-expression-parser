@@ -130,6 +130,18 @@ func main() {
 a=false && b>=c && (d<1000 || e in [1,2,3])
 ```
 
+## Operators and types
+
+* Comparators: `=` `!=` `>` `>=` `<` `<=` (left - param, right - param or value)
+* Logical operations: `||` `&&` (left, right - any statements)
+* Numeric constants: integer 64-bit (`12345678`), float 64-bit with floating point (`12345.678`)
+* String constants (double quotes: `"foo bar"`, `"foo "bar""`)
+* Date constants (double quotes after `dt:`): `dt:"2020-03-04 10:20:30"` (for parsing datetime used [dateparse](github.com/araddon/dateparse) lib)
+* Arrays (any values separated by `,` within square bracket: `[1,2,"foo",dt:"1999-09-09"`)
+* Array operations: `in` `not_in` (`a in [1,2,3]`)
+* Boolean constants: `true` `false`
+* Null constant: `null`
+
 ## Benchmarks
 
 Here are the results output from a benchmark run on a Macbook Pro 2018:
