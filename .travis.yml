@@ -1,11 +1,18 @@
 language: go
 
-sudo: false
+os: linux
+dist: xenial
 
 go:
   - "1.15"
   - "1.16"
   - "1.17"
 
+before_install:
+  - go get -t -v ./...
+
 script:
-  - make test
+  - go test -v -race -coverprofile=coverage.txt -covermode=atomic
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
