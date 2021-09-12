@@ -48,7 +48,7 @@ This library would parse the expression and return the following struct:
 
 ```
 (*lep.AndX)({
-  conjuncts: ([]lep.Expression) (len=3 cap=4) {
+  Conjuncts: ([]lep.Expression) (len=3 cap=4) {
     (*lep.EqualsX)({
       Param: (*lep.ParamX)({
         Name: (string) (len=1) "a"
@@ -66,7 +66,7 @@ This library would parse the expression and return the following struct:
       })
     }),
     (*lep.OrX)({
-      disjunctions: ([]lep.Expression) (len=2 cap=2) {
+      Disjunctions: ([]lep.Expression) (len=2 cap=2) {
         (*lep.LessThanX)({
           Param: (*lep.ParamX)({
             Name: (string) (len=1) "d"

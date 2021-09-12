@@ -16,7 +16,7 @@ func parseExpressions(items ...interface{}) (expr []Expression) {
 }
 
 type AndX struct {
-	conjuncts []Expression
+	Conjuncts []Expression
 }
 
 var _ Expression = (*AndX)(nil)
@@ -25,12 +25,12 @@ func And(expr ...Expression) *AndX {
 	var conjuncts []Expression
 	for _, e := range expr {
 		if exprAndX, ok := e.(*AndX); ok {
-			conjuncts = append(conjuncts, exprAndX.conjuncts...)
+			conjuncts = append(conjuncts, exprAndX.Conjuncts...)
 		} else {
 			conjuncts = append(conjuncts, e)
 		}
 	}
-	return &AndX{conjuncts: conjuncts}
+	return &AndX{Conjuncts: conjuncts}
 }
 
 func (e AndX) Equals(other Expression) bool {
@@ -39,9 +39,9 @@ func (e AndX) Equals(other Expression) bool {
 		return false
 	}
 
-	leftConjuncts := e.conjuncts
-	rightConjuncts := make([]Expression, len(otherAndX.conjuncts))
-	copy(rightConjuncts, otherAndX.conjuncts)
+	leftConjuncts := e.Conjuncts
+	rightConjuncts := make([]Expression, len(otherAndX.Conjuncts))
+	copy(rightConjuncts, otherAndX.Conjuncts)
 
 	var leftFound bool
 	for _, leftConjunct := range leftConjuncts {
@@ -62,7 +62,7 @@ func (e AndX) Equals(other Expression) bool {
 
 func (e AndX) String() string {
 	var items []string
-	for _, conjunct := range e.conjuncts {
+	for _, conjunct := range e.Conjuncts {
 		if _, ok := conjunct.(*OrX); ok {
 			items = append(items, "("+conjunct.String()+")")
 		} else {
@@ -78,7 +78,7 @@ func parseAnd(elements ...interface{}) (*AndX, error) {
 }
 
 type OrX struct {
-	disjunctions []Expression
+	Disjunctions []Expression
 }
 
 var _ Expression = (*OrX)(nil)
@@ -87,12 +87,12 @@ func Or(expr ...Expression) *OrX {
 	var disjunctions []Expression
 	for _, e := range expr {
 		if exprOrX, ok := e.(*OrX); ok {
-			disjunctions = append(disjunctions, exprOrX.disjunctions...)
+			disjunctions = append(disjunctions, exprOrX.Disjunctions...)
 		} else {
 			disjunctions = append(disjunctions, e)
 		}
 	}
-	return &OrX{disjunctions: disjunctions}
+	return &OrX{Disjunctions: disjunctions}
 }
 
 func (e OrX) Equals(other Expression) bool {
@@ -101,9 +101,9 @@ func (e OrX) Equals(other Expression) bool {
 		return false
 	}
 
-	leftDisjunctions := e.disjunctions
-	rightDisjunctions := make([]Expression, len(otherOrX.disjunctions))
-	copy(rightDisjunctions, otherOrX.disjunctions)
+	leftDisjunctions := e.Disjunctions
+	rightDisjunctions := make([]Expression, len(otherOrX.Disjunctions))
+	copy(rightDisjunctions, otherOrX.Disjunctions)
 
 	var leftFound bool
 	for _, leftDisjunction := range leftDisjunctions {
@@ -124,7 +124,7 @@ func (e OrX) Equals(other Expression) bool {
 
 func (e OrX) String() string {
 	var items []string
-	for _, disjunction := range e.disjunctions {
+	for _, disjunction := range e.Disjunctions {
 		items = append(items, disjunction.String())
 	}
 	return strings.Join(items, " || ")
