@@ -130,6 +130,99 @@ func main() {
 a=false && b>=c && (d<1000 || e in [1,2,3])
 ```
 
+## Real life examples
+<details>
+  <summary>Create SQL query from expression string</summary>
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/davecgh/go-spew/spew"
+	sb "github.com/huandu/go-sqlbuilder"
+	lep "github.com/mgudov/logic-expression-parser"
+)
+
+func traverse(sql *sb.SelectBuilder, expr lep.Expression) (string, error) {
+	switch e := expr.(type) {
+	default:
+		return "", fmt.Errorf("not implemented: %T", e)
+	case *lep.OrX:
+		var args []string
+		for _, disjunction := range e.Disjunctions {
+			arg, err := traverse(sql, disjunction)
+			if err != nil {
+				return "", err
+			}
+			args = append(args, arg)
+		}
+		return sql.Or(args...), nil
+	case *lep.AndX:
+		var args []string
+		for _, conjunct := range e.Conjuncts {
+			arg, err := traverse(sql, conjunct)
+			if err != nil {
+				return "", err
+			}
+			args = append(args, arg)
+		}
+		return sql.And(args...), nil
+	case *lep.EqualsX:
+		value := e.Value.Value()
+		if value == nil {
+			return sql.IsNotNull(e.Param.String()), nil
+		}
+		return sql.Equal(e.Param.String(), value), nil
+	case *lep.NotEqualsX:
+		value := e.Value.Value()
+		if value == nil {
+			return sql.IsNotNull(e.Param.String()), nil
+		}
+		return sql.NotEqual(e.Param.String(), value), nil
+	case *lep.GreaterThanX:
+		return sql.GreaterThan(e.Param.String(), e.Value.Value()), nil
+	case *lep.InSliceX:
+		var items []interface{}
+		for _, value := range e.Slice.Values {
+			items = append(items, value.Value())
+		}
+		return sql.In(e.Param.String(), items...), nil
+
+		// TODO: other cases
+	}
+}
+
+func main() {
+	query := `active=true && email!=null && (last_login>dt:"2010-01-01" || role in ["client","customer"])`
+
+	expr, err := lep.ParseExpression(query)
+	if err != nil {
+		panic(err)
+	}
+
+	sql := sb.Select("*").From("users")
+	where, err := traverse(sql, expr)
+	if err != nil {
+		panic(err)
+	}
+	sql.Where(where)
+
+	spew.Dump(sql.Build())
+}
+```
+
+```
+(string) (len=99) "SELECT * FROM users WHERE (active = ? AND email IS NOT NULL AND (last_login > ? OR role IN (?, ?)))"
+([]interface {}) (len=4 cap=4) {
+ (bool) true,
+ (time.Time) 2010-01-01 00:00:00 +0000 UTC,
+ (string) (len=6) "client",
+ (string) (len=8) "customer"
+}
+```
+</details>
+
 ## Operators and types
 
 * Comparators: `=` `!=` `>` `>=` `<` `<=` (left - param, right - param or value)
