@@ -79,7 +79,7 @@ func TestParseInSlice(t *testing.T) {
 
 	for _, tt := range tests {
 		s, err := parseInSlice(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && s != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*InSliceX)(nil), s)
 			assert.Equal(t, tt.left, s.Param)
 			assert.Equal(t, tt.right, s.Slice)
@@ -126,7 +126,7 @@ func TestParseNotInSlice(t *testing.T) {
 
 	for _, tt := range tests {
 		s, err := parseNotInSlice(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && s != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*NotInSliceX)(nil), s)
 			assert.Equal(t, tt.left, s.Param)
 			assert.Equal(t, tt.right, s.Slice)

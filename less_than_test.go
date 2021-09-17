@@ -47,7 +47,7 @@ func TestParseLessThan(t *testing.T) {
 
 	for _, tt := range tests {
 		e, err := parseLessThan(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && e != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*LessThanX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
@@ -100,7 +100,7 @@ func TestParseLessThanEqual(t *testing.T) {
 
 	for _, tt := range tests {
 		e, err := parseLessThanEqual(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && e != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*LessThanEqualX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)

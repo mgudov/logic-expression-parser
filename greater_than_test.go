@@ -47,7 +47,7 @@ func TestParseGreaterThan(t *testing.T) {
 
 	for _, tt := range tests {
 		e, err := parseGreaterThan(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && e != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*GreaterThanX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
@@ -100,7 +100,7 @@ func TestParseGreaterThanEqual(t *testing.T) {
 
 	for _, tt := range tests {
 		e, err := parseGreaterThanEqual(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && e != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*GreaterThanEqualX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)

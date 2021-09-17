@@ -3,6 +3,7 @@ package lep
 import (
 	"errors"
 	"github.com/stretchr/testify/assert"
+	"regexp"
 	"testing"
 	"time"
 )
@@ -85,6 +86,17 @@ func TestParseExpression(t *testing.T) {
 				And(
 					LessThan(e, Integer(123)),
 					InSlice(f, Slice(Integer(1), Integer(2), Integer(3), Integer(4), Integer(5))),
+				),
+			),
+		},
+		{
+			query: `a =~ /[a-zA-Z]+/ && b !~ /[0-9]+/gm && (c =~ /[\d]+/ || d !~ /[\D]+/)`,
+			expr: And(
+				MatchRegexp(a, Regexp(regexp.MustCompile(`/[a-zA-Z]+/`))),
+				NotMatchRegexp(b, Regexp(regexp.MustCompile(`/[0-9]+/gm`))),
+				Or(
+					MatchRegexp(c, Regexp(regexp.MustCompile(`/[\d]+/`))),
+					NotMatchRegexp(d, Regexp(regexp.MustCompile(`/[\D]+/`))),
 				),
 			),
 		},

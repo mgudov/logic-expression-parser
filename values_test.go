@@ -83,7 +83,7 @@ func TestParseInteger(t *testing.T) {
 
 	for _, tt := range tests {
 		v, err := parseInteger(tt.raw)
-		if tt.err == nil && assert.NoError(t, err) && v != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*IntegerX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
@@ -130,7 +130,7 @@ func TestParseFloat(t *testing.T) {
 
 	for _, tt := range tests {
 		v, err := parseFloat(tt.raw)
-		if tt.err == nil && assert.NoError(t, err) && v != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*FloatX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
@@ -172,7 +172,7 @@ func TestParseBoolean(t *testing.T) {
 
 	for _, tt := range tests {
 		v, err := parseBoolean(tt.raw)
-		if tt.err == nil && assert.NoError(t, err) && v != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*BooleanX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
