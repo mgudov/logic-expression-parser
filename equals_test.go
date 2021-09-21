@@ -42,7 +42,7 @@ func TestParseEquals(t *testing.T) {
 
 	for _, tt := range tests {
 		e, err := parseEquals(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && e != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*EqualsX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)
@@ -90,7 +90,7 @@ func TestParseNotEquals(t *testing.T) {
 
 	for _, tt := range tests {
 		e, err := parseNotEquals(tt.left, tt.right)
-		if tt.err == nil && assert.NoError(t, err) && e != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*NotEqualsX)(nil), e)
 			assert.Equal(t, tt.left, e.Param)
 			assert.Equal(t, tt.right, e.Value)

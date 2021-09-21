@@ -34,7 +34,7 @@ func TestParseDateTime(t *testing.T) {
 
 	for _, tt := range tests {
 		d, err := parseDateTime(tt.string)
-		if tt.err == nil && assert.NoError(t, err) && d != nil {
+		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*DateTimeX)(nil), d)
 			assert.Equal(t, tt.result, d.Val)
 			assert.Equal(t, tt.result, d.Value())

@@ -229,6 +229,7 @@ func main() {
 * Logical operations: `||` `&&` (left, right - any statements)
 * Numeric constants: integer 64-bit (`12345678`), float 64-bit with floating point (`12345.678`)
 * String constants (double quotes: `"foo bar"`, `"foo "bar""`)
+* Regexp operations: `=~` (match regexp `a =~ /[a-z]+/`), `!~` (not match `b !~ /[0-9]+/`)
 * Date constants (double quotes after `dt:`): `dt:"2020-03-04 10:20:30"` (for parsing datetime used [dateparse](github.com/araddon/dateparse) lib)
 * Arrays (any values separated by `,` within square bracket: `[1,2,"foo",dt:"1999-09-09"]`)
 * Array operations: `in` `not_in` (`a in [1,2,3]`)
