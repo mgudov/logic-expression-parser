@@ -1,13 +1,18 @@
 package lep
 
-type EqualsX statement
+type EqualsX struct {
+	statement
+}
 
 var _ Expression = (*EqualsX)(nil)
+var _ Statement = (*EqualsX)(nil)
 
 func Equals(param *ParamX, value Value) *EqualsX {
 	return &EqualsX{
-		Param: param,
-		Value: value,
+		statement: statement{
+			Param: param,
+			Value: value,
+		},
 	}
 }
 
@@ -30,14 +35,19 @@ func parseEquals(left, right interface{}) (*EqualsX, error) {
 	return Equals(param, value), nil
 }
 
-type NotEqualsX statement
+type NotEqualsX struct {
+	statement
+}
 
 var _ Expression = (*NotEqualsX)(nil)
+var _ Statement = (*NotEqualsX)(nil)
 
 func NotEquals(param *ParamX, value Value) *NotEqualsX {
 	return &NotEqualsX{
-		Param: param,
-		Value: value,
+		statement: statement{
+			Param: param,
+			Value: value,
+		},
 	}
 }
 

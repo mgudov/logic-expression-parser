@@ -29,6 +29,7 @@ func TestParseRegexp(t *testing.T) {
 		if tt.err == nil && assert.NoError(t, err) {
 			assert.IsType(t, (*RegexpX)(nil), r)
 			assert.Equal(t, tt.result, r.Regexp)
+			assert.Equal(t, tt.result, r.Value())
 			assert.Equal(t, tt.result.String(), r.String())
 		} else {
 			assert.EqualError(t, err, tt.err.Error())
@@ -67,6 +68,8 @@ func TestParseMatchRegexp(t *testing.T) {
 			assert.IsType(t, (*MatchRegexpX)(nil), r)
 			assert.Equal(t, tt.left, r.Param)
 			assert.Equal(t, tt.right, r.Regexp)
+			assert.Equal(t, tt.left, r.GetParam())
+			assert.Equal(t, tt.right, r.GetValue())
 			assert.Equal(t, tt.result, r.String())
 		} else {
 			assert.EqualError(t, err, tt.err.Error())
@@ -105,6 +108,8 @@ func TestParseNotMatchRegexp(t *testing.T) {
 			assert.IsType(t, (*NotMatchRegexpX)(nil), r)
 			assert.Equal(t, tt.left, r.Param)
 			assert.Equal(t, tt.right, r.Regexp)
+			assert.Equal(t, tt.left, r.GetParam())
+			assert.Equal(t, tt.right, r.GetValue())
 			assert.Equal(t, tt.result, r.String())
 		} else {
 			assert.EqualError(t, err, tt.err.Error())

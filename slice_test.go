@@ -83,6 +83,8 @@ func TestParseInSlice(t *testing.T) {
 			assert.IsType(t, (*InSliceX)(nil), s)
 			assert.Equal(t, tt.left, s.Param)
 			assert.Equal(t, tt.right, s.Slice)
+			assert.Equal(t, tt.left, s.GetParam())
+			assert.Equal(t, tt.right, s.GetValue())
 			assert.Equal(t, tt.result, s.String())
 		} else {
 			assert.EqualError(t, err, tt.err.Error())
@@ -130,6 +132,8 @@ func TestParseNotInSlice(t *testing.T) {
 			assert.IsType(t, (*NotInSliceX)(nil), s)
 			assert.Equal(t, tt.left, s.Param)
 			assert.Equal(t, tt.right, s.Slice)
+			assert.Equal(t, tt.left, s.GetParam())
+			assert.Equal(t, tt.right, s.GetValue())
 			assert.Equal(t, tt.result, s.String())
 		} else {
 			assert.EqualError(t, err, tt.err.Error())
