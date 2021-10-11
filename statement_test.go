@@ -55,8 +55,14 @@ func TestParseStatement(t *testing.T) {
 	for _, tt := range tests {
 		param, value, err := parseStatement(tt.left, tt.right)
 		if tt.err == nil && assert.NoError(t, err) {
+			st := &statement{
+				Param: param,
+				Value: value,
+			}
 			assert.Equal(t, tt.left, param)
 			assert.Equal(t, tt.right, value)
+			assert.Equal(t, tt.left, st.GetParam())
+			assert.Equal(t, tt.right, st.GetValue())
 		} else {
 			assert.EqualError(t, err, tt.err.Error())
 		}

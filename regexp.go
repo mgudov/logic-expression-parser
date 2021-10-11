@@ -7,6 +7,7 @@ type RegexpX struct {
 }
 
 var _ Expression = (*RegexpX)(nil)
+var _ Value = (*RegexpX)(nil)
 
 func Regexp(regexp *regexp.Regexp) *RegexpX {
 	return &RegexpX{Regexp: regexp}
@@ -23,6 +24,10 @@ func (e RegexpX) String() string {
 	return e.Regexp.String()
 }
 
+func (e RegexpX) Value() interface{} {
+	return e.Regexp
+}
+
 func parseRegexp(b []byte) (*RegexpX, error) {
 	re, err := regexp.Compile(string(b))
 	if err != nil {
@@ -37,6 +42,7 @@ type MatchRegexpX struct {
 }
 
 var _ Expression = (*MatchRegexpX)(nil)
+var _ Statement = (*MatchRegexpX)(nil)
 
 func MatchRegexp(param *ParamX, regexp *RegexpX) *MatchRegexpX {
 	return &MatchRegexpX{
@@ -54,6 +60,14 @@ func (e MatchRegexpX) Equals(other Expression) bool {
 
 func (e MatchRegexpX) String() string {
 	return e.Param.String() + " =~ " + e.Regexp.String()
+}
+
+func (e MatchRegexpX) GetParam() *ParamX {
+	return e.Param
+}
+
+func (e MatchRegexpX) GetValue() Value {
+	return e.Regexp
 }
 
 func parseMatchRegexp(left, right interface{}) (*MatchRegexpX, error) {
@@ -74,6 +88,7 @@ type NotMatchRegexpX struct {
 }
 
 var _ Expression = (*NotMatchRegexpX)(nil)
+var _ Statement = (*NotMatchRegexpX)(nil)
 
 func NotMatchRegexp(param *ParamX, regexp *RegexpX) *NotMatchRegexpX {
 	return &NotMatchRegexpX{
@@ -91,6 +106,14 @@ func (e NotMatchRegexpX) Equals(other Expression) bool {
 
 func (e NotMatchRegexpX) String() string {
 	return e.Param.String() + " =~ " + e.Regexp.String()
+}
+
+func (e NotMatchRegexpX) GetParam() *ParamX {
+	return e.Param
+}
+
+func (e NotMatchRegexpX) GetValue() Value {
+	return e.Regexp
 }
 
 func parseNotMatchRegexp(left, right interface{}) (*NotMatchRegexpX, error) {

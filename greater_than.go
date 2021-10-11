@@ -1,13 +1,18 @@
 package lep
 
-type GreaterThanX statement
+type GreaterThanX struct {
+	statement
+}
 
 var _ Expression = (*GreaterThanX)(nil)
+var _ Statement = (*GreaterThanX)(nil)
 
 func GreaterThan(param *ParamX, value Value) *GreaterThanX {
 	return &GreaterThanX{
-		Param: param,
-		Value: value,
+		statement: statement{
+			Param: param,
+			Value: value,
+		},
 	}
 }
 
@@ -30,14 +35,19 @@ func parseGreaterThan(left, right interface{}) (*GreaterThanX, error) {
 	return GreaterThan(param, value), nil
 }
 
-type GreaterThanEqualX statement
+type GreaterThanEqualX struct {
+	statement
+}
 
+var _ Statement = (*GreaterThanEqualX)(nil)
 var _ Expression = (*GreaterThanEqualX)(nil)
 
 func GreaterThanEqual(param *ParamX, value Value) *GreaterThanEqualX {
 	return &GreaterThanEqualX{
-		Param: param,
-		Value: value,
+		statement: statement{
+			Param: param,
+			Value: value,
+		},
 	}
 }
 

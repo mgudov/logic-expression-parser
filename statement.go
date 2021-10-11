@@ -1,8 +1,23 @@
 package lep
 
+type Statement interface {
+	GetParam() *ParamX
+	GetValue() Value
+}
+
 type statement struct {
 	Param *ParamX
 	Value Value
+}
+
+var _ Statement = (*statement)(nil)
+
+func (s statement) GetParam() *ParamX {
+	return s.Param
+}
+
+func (s statement) GetValue() Value {
+	return s.Value
 }
 
 func parseStatement(left, right interface{}) (*ParamX, Value, error) {

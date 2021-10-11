@@ -57,6 +57,7 @@ type InSliceX struct {
 }
 
 var _ Expression = (*InSliceX)(nil)
+var _ Statement = (*InSliceX)(nil)
 
 func InSlice(param *ParamX, slice *SliceX) *InSliceX {
 	return &InSliceX{
@@ -74,6 +75,14 @@ func (e InSliceX) Equals(other Expression) bool {
 
 func (e InSliceX) String() string {
 	return e.Param.String() + " in " + e.Slice.String()
+}
+
+func (e InSliceX) GetParam() *ParamX {
+	return e.Param
+}
+
+func (e InSliceX) GetValue() Value {
+	return e.Slice
 }
 
 func parseInSlice(left, right interface{}) (*InSliceX, error) {
@@ -94,6 +103,7 @@ type NotInSliceX struct {
 }
 
 var _ Expression = (*NotInSliceX)(nil)
+var _ Statement = (*NotInSliceX)(nil)
 
 func NotInSlice(param *ParamX, slice *SliceX) *NotInSliceX {
 	return &NotInSliceX{
@@ -111,6 +121,14 @@ func (e NotInSliceX) Equals(other Expression) bool {
 
 func (e NotInSliceX) String() string {
 	return e.Param.String() + " not_in " + e.Slice.String()
+}
+
+func (e NotInSliceX) GetParam() *ParamX {
+	return e.Param
+}
+
+func (e NotInSliceX) GetValue() Value {
+	return e.Slice
 }
 
 func parseNotInSlice(left, right interface{}) (*NotInSliceX, error) {

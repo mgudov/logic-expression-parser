@@ -1,13 +1,18 @@
 package lep
 
-type LessThanX statement
+type LessThanX struct {
+	statement
+}
 
 var _ Expression = (*LessThanX)(nil)
+var _ Statement = (*LessThanX)(nil)
 
 func LessThan(param *ParamX, value Value) *LessThanX {
 	return &LessThanX{
-		Param: param,
-		Value: value,
+		statement: statement{
+			Param: param,
+			Value: value,
+		},
 	}
 }
 
@@ -30,14 +35,19 @@ func parseLessThan(left, right interface{}) (*LessThanX, error) {
 	return LessThan(param, value), nil
 }
 
-type LessThanEqualX statement
+type LessThanEqualX struct {
+	statement
+}
 
 var _ Expression = (*LessThanEqualX)(nil)
+var _ Statement = (*LessThanEqualX)(nil)
 
 func LessThanEqual(param *ParamX, value Value) *LessThanEqualX {
 	return &LessThanEqualX{
-		Param: param,
-		Value: value,
+		statement: statement{
+			Param: param,
+			Value: value,
+		},
 	}
 }
 
