@@ -1,7 +1,7 @@
 logic-expression-parser
 ====
 
-[![Build Status](https://app.travis-ci.com/mgudov/logic-expression-parser.svg?branch=master)](https://app.travis-ci.com/mgudov/logic-expression-parser)
+[![Build Status](https://github.com/mgudov/logic-expression-parser/actions/workflows/test.yml/badge.svg)](https://github.com/mgudov/logic-expression-parser/actions/workflows/test.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mgudov/logic-expression-parser)](https://goreportcard.com/report/github.com/mgudov/logic-expression-parser)
 [![Codecov](https://codecov.io/gh/mgudov/logic-expression-parser/branch/master/graph/badge.svg?token=JMQMBEP2Z6)](https://codecov.io/gh/mgudov/logic-expression-parser)
 
@@ -258,5 +258,5 @@ ok      github.com/mgudov/logic-expression-parser       9.347s
 
 ## Used Libraries
 
-For parsing the string the [pigeon](https://github.com/mna/pigeon) parser generator is used
+For parsing string the [pigeon](https://github.com/mna/pigeon) parser generator is used
 (Licensed under [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)).
