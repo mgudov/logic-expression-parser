@@ -34,6 +34,12 @@ Slice <- '[' elements:(Values / ',')+ ']' { return parseSlice(elements) }
 InSlice <- left:(Param) _ "in" _ right:(Slice) { return parseInSlice(left, right) }
 NotInSlice <- left:(Param) _ "not_in" _ right:(Slice) { return parseNotInSlice(left, right) }
 
+// Contains
+Has <- left:(Param) _ "has" _ right:(Value) { return parseHas(left, right) }
+NotHas <- left:(Param) _ "not_has" _ right:(Value) { return parseNotHas(left, right) }
+HasAny <- left:(Param) _ "has_any" _ right:(Slice) { return parseHasAny(left, right) }
+HasAll <- left:(Param) _ "has_all" _ right:(Slice) { return parseHasAll(left, right) }
+
 // Regular expression
 RegexpOps <- (MatchRegexp / NotMatchRegexp)
 Regexp <- '/' [^/]+ '/' [g|m|D|i|x|s|u|U|A|J]* { return parseRegexp(c.text) }
