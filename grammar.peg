@@ -6,7 +6,7 @@ package lep
 
 Input <- expr:Expr EOF { return expr, nil }
 Expr <- (Or / And / Bracket / Statements)
-Statements <- (Comparators / SliceOps / RegexpOps)
+Statements <- (Comparators / SliceOps / RegexpOps / ClickHouseExpr)
 Bracket <- _ '(' _ expr:Expr _ ')' _ { return expr, nil }
 Param <- [a-zA-Z] [a-zA-Z0-9_.]* { return parseParam(c.text) }
 
@@ -33,6 +33,11 @@ SliceOps <- (InSlice / NotInSlice)
 Slice <- '[' elements:(Values / ',')+ ']' { return parseSlice(elements) }
 InSlice <- left:(Param) _ "in" _ right:(Slice) { return parseInSlice(left, right) }
 NotInSlice <- left:(Param) _ "not_in" _ right:(Slice) { return parseNotInSlice(left, right) }
+ClickHouseExpr <- (ArrayHasValue / ArrayHasAllValues)
+
+// ArrayValues (clickhouse functions support)
+ArrayHasValue <- left:(Param) _ "has" _ right:(Values) { return parseArrayHasValue(left, right) }
+ArrayHasAllValues <- left:(Param) _ "has_all" _ right:(Slice) { return parseArrayHasAllValues(left, right) }
 
 // Regular expression
 RegexpOps <- (MatchRegexp / NotMatchRegexp)
