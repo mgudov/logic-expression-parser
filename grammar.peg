@@ -6,7 +6,7 @@ package lep
 
 Input <- expr:Expr EOF { return expr, nil }
 Expr <- (Or / And / Bracket / Statements)
-Statements <- (Comparators / SliceOps / RegexpOps)
+Statements <- (Comparators / SliceOps / ContainOps / RegexpOps)
 Bracket <- _ '(' _ expr:Expr _ ')' _ { return expr, nil }
 Param <- [a-zA-Z] [a-zA-Z0-9_.]* { return parseParam(c.text) }
 
@@ -35,8 +35,9 @@ InSlice <- left:(Param) _ "in" _ right:(Slice) { return parseInSlice(left, right
 NotInSlice <- left:(Param) _ "not_in" _ right:(Slice) { return parseNotInSlice(left, right) }
 
 // Contains
-Has <- left:(Param) _ "has" _ right:(Value) { return parseHas(left, right) }
-NotHas <- left:(Param) _ "not_has" _ right:(Value) { return parseNotHas(left, right) }
+ContainOps <- (Has / NotHas / HasAny / HasAll)
+Has <- left:(Param) _ "has" _ right:(Values) { return parseHas(left, right) }
+NotHas <- left:(Param) _ "not_has" _ right:(Values) { return parseNotHas(left, right) }
 HasAny <- left:(Param) _ "has_any" _ right:(Slice) { return parseHasAny(left, right) }
 HasAll <- left:(Param) _ "has_all" _ right:(Slice) { return parseHasAll(left, right) }
 

@@ -61,6 +61,16 @@ func TestParseExpression(t *testing.T) {
 			),
 		},
 		{
+			query: `a has 100 && b not_has null || a has_any ["aaa","bbb","ccc"] && b has_all [111,222,333]`,
+			expr: Or(
+				And(Has(a, Integer(100)), NotHas(b, Null())),
+				And(
+					HasAny(a, Slice(String("aaa"), String("bbb"), String("ccc"))),
+					HasAll(b, Slice(Integer(111), Integer(222), Integer(333))),
+				),
+			),
+		},
+		{
 			query: `(a!=null || b=false) && (b!=true || c=null) && (a=null || b=true || c=false)`,
 			expr: And(
 				Or(NotEquals(a, Null()), Equals(b, Boolean(false))),
