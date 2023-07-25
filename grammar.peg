@@ -16,7 +16,7 @@ Null <- "null" { return parseNull() }
 Boolean <- ("true" / "false") { return parseBoolean(c.text) }
 Float <- '-'? [0-9]+[.][0-9]+ { return parseFloat(c.text) }
 Integer <- '-'? [0-9]+ { return parseInteger(c.text) }
-String <- '"' [^"]+ '"' { return parseString(c.text) }
+String <- '"' [^"]* '"' { return parseString(c.text) }
 DateTime <- "dt:" val:(String) { return parseDateTime(val) }
 
 // Comparators

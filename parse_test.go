@@ -87,6 +87,13 @@ func TestParseExpression(t *testing.T) {
 			),
 		},
 		{
+			query: `(a!=b || a!=null || a!="" || a!=0) && (b=a || b=null || b="" || b=0)`,
+			expr: And(
+				Or(NotEquals(a, b), NotEquals(a, Null()), NotEquals(a, String("")), NotEquals(a, Integer(0))),
+				Or(Equals(b, a), Equals(b, Null()), Equals(b, String("")), Equals(b, Integer(0))),
+			),
+		},
+		{
 			query: `b>=c && (a=123 || d=345 || g!=null) || e<123 && f in [1,2,3,4,5]`,
 			expr: Or(
 				And(
