@@ -35,5 +35,5 @@ func IncorrectValue(funcName string, expected, received interface{}) error {
 }
 
 func (e ErrIncorrectValue) Error() string {
-	return fmt.Sprintf("%s: incorrect value; expected: %+v; received: %+v", e.FuncName, e.Expected, e.Received)
+	return fmt.Sprintf("%s: incorrect value; expected: %T; received: %T", e.FuncName, e.Expected, e.Received)
 }

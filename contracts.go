@@ -9,3 +9,8 @@ type Value interface {
 	Expression
 	Value() interface{}
 }
+
+type Stringify interface {
+	Value
+	IsStringify() bool
+}

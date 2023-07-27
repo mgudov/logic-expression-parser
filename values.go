@@ -10,7 +10,7 @@ type StringX struct {
 	Val string
 }
 
-var _ Value = (*StringX)(nil)
+var _ Stringify = (*StringX)(nil)
 
 func String(val string) *StringX {
 	return &StringX{Val: val}
@@ -29,6 +29,10 @@ func (s StringX) String() string {
 
 func (s StringX) Value() interface{} {
 	return s.Val
+}
+
+func (s StringX) IsStringify() bool {
+	return true
 }
 
 func parseString(b []byte) (*StringX, error) {

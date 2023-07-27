@@ -6,7 +6,7 @@ package lep
 
 Input <- expr:Expr EOF { return expr, nil }
 Expr <- (Or / And / Bracket / Statements)
-Statements <- (Comparators / SliceOps / ContainOps / RegexpOps)
+Statements <- (Comparators / StringOps / SliceOps / ContainOps / RegexpOps)
 Bracket <- _ '(' _ expr:Expr _ ')' _ { return expr, nil }
 Param <- [a-zA-Z] [a-zA-Z0-9_.]* { return parseParam(c.text) }
 
@@ -27,6 +27,11 @@ LessThan <- left:(Param) _ "<" _ right:(Values / Param) { return parseLessThan(l
 LessThanEqual <- left:(Param) _ "<=" _ right:(Values / Param) { return parseLessThanEqual(left, right) }
 GreaterThan <- left:(Param) _ ">" _ right:(Values / Param) { return parseGreaterThan(left, right) }
 GreaterThanEqual <- left:(Param) _ ">=" _ right:(Values / Param) { return parseGreaterThanEqual(left, right) }
+
+// Strings
+StringOps <- (StartsWith / EndsWith)
+StartsWith <- left:(Param) _ "starts_with" _ right:(String / Param) { return parseStartsWith(left, right) }
+EndsWith <- left:(Param) _ "ends_with" _ right:(String / Param) { return parseEndsWith(left, right) }
 
 // Slices
 SliceOps <- (InSlice / NotInSlice)

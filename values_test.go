@@ -42,6 +42,7 @@ func TestParseString(t *testing.T) {
 			assert.IsType(t, (*StringX)(nil), v)
 			assert.Equal(t, tt.result, v.Val)
 			assert.Equal(t, tt.result, v.Value())
+			assert.Equal(t, true, v.IsStringify())
 			assert.Equal(t, `"`+tt.result+`"`, v.String())
 		}
 	}
