@@ -6,8 +6,8 @@ import (
 
 var (
 	benchSmallQuery  = `a=1000 || b="foo"`
-	benchMediumQuery = `a>1000 && b<5000 || c="foo" && d="bar" || e!="test"`
-	benchLargeQuery  = `(a=false) && b>=c && (d<1000 || e>=2000 || (g!=5000 && g>=1000 && h="foo")) || j in [1,2,3,4,5] && k>dt:"2020-01-01"`
+	benchMediumQuery = `a>1000 && b<5000 || c="foo" && d="bar" || e!="test" || e starts_with "some"`
+	benchLargeQuery  = `(a=false) && b>=c && (d<1000 || e>=2000 || (g!=5000 && g>=1000 && h="foo")) || j in [1,2,3,4,5] && k>dt:"2020-01-01" || m starts_with "foo" && m ends_with n`
 )
 
 func BenchmarkSmallQuery(b *testing.B) {

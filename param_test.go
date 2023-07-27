@@ -32,6 +32,7 @@ func TestParseParam(t *testing.T) {
 			assert.Equal(t, tt.result, p.Name)
 			assert.Equal(t, tt.result, p.Value())
 			assert.Equal(t, tt.result, p.String())
+			assert.Equal(t, true, p.IsStringify())
 		}
 	}
 }

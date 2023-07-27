@@ -229,6 +229,7 @@ func main() {
 * Logical operations: `||` `&&` (left, right - any statements)
 * Numeric constants: integer 64-bit (`12345678`), float 64-bit with floating point (`12345.678`)
 * String constants (double quotes: `"foo bar"`, `"foo "bar""`)
+* String operations: `starts_with`, `ends_with` (left - param, right - param or string)
 * Regexp operations: `=~` (match regexp `a =~ /[a-z]+/`), `!~` (not match `b !~ /[0-9]+/`)
 * Date constants (double quotes after `dt:`): `dt:"2020-03-04 10:20:30"` (for parsing datetime used [dateparse](https://github.com/araddon/dateparse))
 * Arrays (any values separated by `,` within square bracket: `[1,2,"foo",dt:"1999-09-09"]`)
@@ -245,15 +246,15 @@ go test -benchmem -bench=.
 goos: darwin
 goarch: amd64
 pkg: github.com/mgudov/logic-expression-parser
-cpu: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
-BenchmarkSmallQuery-12                     27211             42736 ns/op           20504 B/op        339 allocs/op
-BenchmarkMediumQuery-12                    16160             72034 ns/op           32370 B/op        564 allocs/op
-BenchmarkLargeQuery-12                      4066            286038 ns/op          114507 B/op       2134 allocs/op
-BenchmarkSmallQueryWithMemo-12             13236             91061 ns/op           95044 B/op        283 allocs/op
-BenchmarkMediumQueryWithMemo-12             4762            218919 ns/op          213942 B/op        626 allocs/op
-BenchmarkLargeQueryWithMemo-12              1881            549937 ns/op          514177 B/op       1413 allocs/op
+cpu: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+BenchmarkSmallQuery-16                     26547             45293 ns/op           19353 B/op        332 allocs/op
+BenchmarkMediumQuery-16                    10000            106334 ns/op           42931 B/op        807 allocs/op
+BenchmarkLargeQuery-16                      3268            331438 ns/op          114500 B/op       2385 allocs/op
+BenchmarkSmallQueryWithMemo-16             14696             79791 ns/op           82590 B/op        276 allocs/op
+BenchmarkMediumQueryWithMemo-16             4924            246504 ns/op          257072 B/op        746 allocs/op
+BenchmarkLargeQueryWithMemo-16              2071            590092 ns/op          594584 B/op       1627 allocs/op
 PASS
-ok      github.com/mgudov/logic-expression-parser       9.347s
+ok      github.com/mgudov/logic-expression-parser       8.744s
 ```
 
 ## Used Libraries

@@ -6,7 +6,7 @@ type ParamX struct {
 	Name string
 }
 
-var _ Value = (*ParamX)(nil)
+var _ Stringify = (*ParamX)(nil)
 
 func Param(name string) *ParamX {
 	return &ParamX{Name: name}
@@ -25,6 +25,10 @@ func (p ParamX) String() string {
 
 func (p ParamX) Value() interface{} {
 	return p.Name
+}
+
+func (p ParamX) IsStringify() bool {
+	return true
 }
 
 func parseParam(b []byte) (*ParamX, error) {

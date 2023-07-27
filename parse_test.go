@@ -54,6 +54,19 @@ func TestParseExpression(t *testing.T) {
 			),
 		},
 		{
+			query: `(a starts_with "foo" || a ends_with "bar") && (b starts_with a || b ends_with c)`,
+			expr: And(
+				Or(
+					StartsWith(Param("a"), String("foo")),
+					EndsWith(Param("a"), String("bar")),
+				),
+				Or(
+					StartsWith(Param("b"), Param("a")),
+					EndsWith(Param("b"), Param("c")),
+				),
+			),
+		},
+		{
 			query: `a in [100,10.5,"some text"] && b not_in [false,null,12.34,-56.78]`,
 			expr: And(
 				InSlice(a, Slice(Integer(100), Float(10.5), String("some text"))),
